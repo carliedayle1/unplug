@@ -1,0 +1,24 @@
+<svg width="64" height="64" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="UNPLUG!">
+  <!--
+    The pinwheel from the design's prop kit, on the sun-yellow field.
+
+    Chosen because it has to survive 16×16 in a browser tab: four solid
+    quadrants in the four pops plus a navy hub reads as a distinct shape
+    at any size. A letterform would have needed Baloo 2 (not available to
+    an SVG favicon) and "101" turns to mud below about 32px.
+  -->
+  <rect width="64" height="64" rx="14" fill="#F9DE55"/>
+  <!--
+    Scaled to 0.78 so the blades nearly fill the tile. At 0.5 the mark
+    read as a muddy dot at 16px — there simply weren't enough pixels per
+    blade. Hub kept small for the same reason: at 16px a large hub eats
+    the colour that makes the mark identifiable.
+  -->
+  <g transform="translate(32 32) scale(0.78) translate(-50 -50)">
+    <path d="M50 50 50 6a26 26 0 0 1 26 26z" fill="#E8342A"/>
+    <path d="M50 50 94 50a26 26 0 0 1-26 26z" fill="#F6A11F"/>
+    <path d="M50 50 50 94a26 26 0 0 1-26-26z" fill="#3FB68B"/>
+    <path d="M50 50 6 50a26 26 0 0 1 26-26z" fill="#E5218A"/>
+    <circle cx="50" cy="50" r="9" fill="#3E5163"/>
+  </g>
+</svg>

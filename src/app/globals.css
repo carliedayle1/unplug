@@ -1,26 +1,370 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* ─────────────────────────────────────────────────────────────
+   UNPLUG! design system v0.1
+   Every value here is sampled from the book cover via the
+   Style Tile deliverable. Nothing is invented. Components must
+   consume these tokens — never a raw hex.
+   ───────────────────────────────────────────────────────────── */
+
+@theme {
+  /* ---- Field & ink ---------------------------------------- */
+  /* Yellow is the page, not an accent. Cards sit on top of it. */
+  --color-sun-yellow: #f9de55;
+  --color-sun-deep: #f2cf43;
+  --color-ink-navy: #3e5163;
+  --color-ink-muted: #4a5c6e; /* the ONLY way to de-emphasise type */
+  --color-cream: #fffbef; /* card surfaces + type outline — never white */
+
+  /* ---- The five pops -------------------------------------- */
+  /* One at a time. Never gradiented, never two in one shape.  */
+  --color-pop-red: #e8342a;
+  --color-pop-red-deep: #b0231b;
+  --color-pop-red-tint: #fbd9d6;
+
+  --color-pop-blue: #2b7fd4;
+  --color-pop-blue-deep: #1e5fa0;
+  --color-pop-blue-tint: #d6e8f9;
+
+  --color-pop-teal: #3fb68b;
+  --color-pop-teal-deep: #2e8c6a;
+  --color-pop-teal-tint: #d5f0e5;
+
+  --color-pop-magenta: #e5218a;
+  --color-pop-magenta-deep: #ad1868;
+  --color-pop-magenta-tint: #fbd4e7;
+
+  --color-pop-orange: #f6a11f;
+  --color-pop-orange-deep: #c97c0c;
+  --color-pop-orange-tint: #fde8c7;
+
+  /* ---- Support -------------------------------------------- */
+  --color-link-hover: #ad1868; /* magenta-deep */
+  --color-dash-empty: #c9c2b0; /* empty sticker ring */
+
+  /* Cover cast skin tones, for the illustration layer */
+  --color-skin-1: #f7d2b0;
+  --color-skin-2: #e9b285;
+  --color-skin-3: #c98a5b;
+  --color-skin-4: #94603a;
+  --color-skin-5: #5e3a22;
+
+  /* ---- Type ----------------------------------------------- */
+  --font-display: var(--font-baloo), cursive;
+  --font-body: var(--font-nunito), system-ui, sans-serif;
+  --font-script: var(--font-caveat), cursive;
+
+  /* Type scale — Baloo display, Nunito UI/body, Caveat accent  */
+  --text-display-xl: 6.5rem; /* 104 */
+  --text-display-xl--line-height: 0.92;
+  --text-display-xl--letter-spacing: -0.02em;
+  --text-display-xl--font-weight: 800;
+
+  --text-display-lg: 3.5rem; /* 56 */
+  --text-display-lg--line-height: 1;
+  --text-display-lg--letter-spacing: -0.02em;
+  --text-display-lg--font-weight: 700;
+
+  --text-heading: 2rem; /* 32 */
+  --text-heading--line-height: 1.1875;
+  --text-heading--font-weight: 900;
+
+  --text-subhead: 1.375rem; /* 22 */
+  --text-subhead--line-height: 1.3636;
+  --text-subhead--font-weight: 800;
+
+  --text-body: 1.125rem; /* 18 — the floor */
+  --text-body--line-height: 1.55;
+  --text-body--font-weight: 600;
+
+  --text-label: 1rem; /* 16 — annotation only */
+  --text-label--line-height: 1.2;
+  --text-label--letter-spacing: 0.1em;
+  --text-label--font-weight: 900;
+
+  --text-script: 1.875rem; /* 30 — Caveat floor is 28 */
+  --text-script--line-height: 1.05;
+  --text-script--font-weight: 600;
+
+  /* ---- Space · 4px base ----------------------------------- */
+  --spacing: 4px;
+
+  /* ---- Radius --------------------------------------------- */
+  /* Pill is reserved for things you press. That's the whole rule. */
+  --radius-sm: 8px; /* badges */
+  --radius-md: 16px; /* inputs, tiles */
+  --radius-lg: 24px; /* cards */
+  --radius-xl: 28px; /* panels, modal */
+
+  /* ---- Depth · hard offset, never a blur-only glow -------- */
+  --shadow-rest: 0 4px 0 var(--color-sun-deep);
+  --shadow-lift: 0 10px 0 var(--color-sun-deep), 0 16px 26px rgb(62 81 99 / 0.22);
+  --shadow-press: 0 1px 0 var(--color-sun-deep);
+
+  /* ---- Motion --------------------------------------------- */
+  --ease-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --duration-press: 90ms;
+  --duration-lift: 180ms;
+  --duration-overshoot: 420ms;
+  /* A whole section changing field colour — the sticker chart's teal
+     takeover at ten. (Was --duration-unplug, named for the removed
+     hero plug mechanic.) */
+  --duration-field-swap: 600ms;
+  --duration-confetti: 1200ms;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+/* ─────────────────────────────────────────────────────────────
+   Base layer
+   ───────────────────────────────────────────────────────────── */
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    /* Sticky nav is 72px; keep anchor targets clear of it. */
+    scroll-padding-top: 88px;
+  }
+
+  body {
+    background: var(--color-sun-yellow);
+    color: var(--color-ink-navy);
+    font-family: var(--font-body);
+    font-size: var(--text-body);
+    font-weight: 600;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* Links: ink navy + a 3px underline. Pop blue is only 3.1:1 on
+     yellow, so it never carries link text. Hover goes magenta-deep. */
+  a {
+    color: var(--color-ink-navy);
+    text-decoration-line: underline;
+    text-decoration-thickness: 3px;
+    text-underline-offset: 4px;
+  }
+  a:hover {
+    color: var(--color-link-hover);
+  }
+
+  /* Focus is never removed. 3px navy, 3px offset, everywhere. */
+  :focus-visible {
+    outline: 3px solid var(--color-ink-navy);
+    outline-offset: 3px;
+    border-radius: 6px;
+  }
+
+  button,
+  input,
+  select,
+  textarea {
+    font-family: var(--font-body);
+  }
+
+  /* Display type carries the cream outline; keep it crisp. */
+  h1,
+  h2 {
+    text-wrap: balance;
+  }
+  p {
+    text-wrap: pretty;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* ─────────────────────────────────────────────────────────────
+   Utilities — the three treatments that repeat everywhere
+   ───────────────────────────────────────────────────────────── */
+
+@layer utilities {
+  /* The Baloo cream-outline recipe. Set --outline-w per use:
+     ~8px at 44px type, ~16px at 180px. Outlined numerals are
+     GRAPHICS, not set type — any pop is allowed because the
+     outline, not the fill, does the separating. */
+  .outlined {
+    font-family: var(--font-display);
+    -webkit-text-stroke: var(--outline-w, 8px) var(--outline-c, var(--color-cream));
+    paint-order: stroke fill;
+    text-shadow: 0 var(--outline-drop, 6px) 0 rgb(62 81 99 / 0.18);
+  }
+
+  /* The outline colour must ALWAYS equal the surface behind the type —
+     that's what separates the letterforms. Cream is only the default
+     because most type sits on a cream card. Getting this wrong makes
+     the heading a colourless blob (cream fill + cream stroke), which
+     is exactly what happened to "Stuck? Press it." on the navy field. */
+  .outlined-on-yellow {
+    --outline-c: var(--color-sun-yellow);
+  }
+  .outlined-on-deep {
+    --outline-c: var(--color-sun-deep);
+  }
+  .outlined-on-navy {
+    --outline-c: var(--color-ink-navy);
+  }
+  .outlined-on-teal {
+    --outline-c: var(--color-pop-teal);
+  }
+
+  /* Rest → hover → pressed → focus depth as one class. */
+  .card-lift {
+    box-shadow: var(--shadow-rest);
+    transition:
+      transform var(--duration-lift) var(--ease-bounce),
+      box-shadow var(--duration-lift) var(--ease-bounce);
+  }
+  @media (hover: hover) {
+    .card-lift:hover {
+      transform: translateY(-4px) rotate(-1.5deg);
+      box-shadow: var(--shadow-lift);
+    }
+  }
+  .card-lift:active {
+    transform: translateY(3px) scale(0.98);
+    box-shadow: var(--shadow-press);
+    transition-duration: var(--duration-press);
+  }
+
+  /* pop-* sets fill, pressed shade, tint AND the correct on-fill
+     text colour together — so a component cannot accidentally pair
+     cream text with teal. The contrast rules become structural. */
+  .pop-red {
+    --pop: var(--color-pop-red);
+    --pop-deep: var(--color-pop-red-deep);
+    --pop-tint: var(--color-pop-red-tint);
+    --on-pop: var(--color-cream);
+  }
+  .pop-blue {
+    --pop: var(--color-pop-blue);
+    --pop-deep: var(--color-pop-blue-deep);
+    --pop-tint: var(--color-pop-blue-tint);
+    --on-pop: var(--color-cream);
+  }
+  .pop-magenta {
+    --pop: var(--color-pop-magenta);
+    --pop-deep: var(--color-pop-magenta-deep);
+    --pop-tint: var(--color-pop-magenta-tint);
+    --on-pop: var(--color-cream);
+  }
+  .pop-teal {
+    --pop: var(--color-pop-teal);
+    --pop-deep: var(--color-pop-teal-deep);
+    --pop-tint: var(--color-pop-teal-tint);
+    --on-pop: var(--color-ink-navy);
+  }
+  .pop-orange {
+    --pop: var(--color-pop-orange);
+    --pop-deep: var(--color-pop-orange-deep);
+    --pop-tint: var(--color-pop-orange-tint);
+    --on-pop: var(--color-ink-navy);
+  }
+
+  /* The wordmark treatment, reproducing the cover's logotype: a thick
+     cream outline around each letter plus a soft dark drop shadow, so
+     the letters sit above the field rather than on it.
+
+     The double shadow — hard offset then blurred — is the same recipe
+     the cards use (`--shadow-lift`), so it stays inside the "depth is a
+     hard offset, never a blur-only glow" rule. Colour comes from each
+     letter's own span; see components/chrome/Wordmark.tsx. */
+  .wordmark {
+    font-family: var(--font-display);
+    font-weight: 800;
+    letter-spacing: -0.01em;
+    -webkit-text-stroke: var(--outline-w, 6px) var(--outline-c, var(--color-cream));
+    paint-order: stroke fill;
+    text-shadow:
+      0 var(--wm-drop, 3px) 0 rgb(62 81 99 / 0.22),
+      0 calc(var(--wm-drop, 3px) * 2) calc(var(--wm-drop, 3px) * 2.5)
+        rgb(62 81 99 / 0.3);
+  }
+
+  /* The dot grid that sits under the yellow field. */
+  .dot-grid {
+    background-image: radial-gradient(var(--color-sun-deep) 2px, transparent 2px);
+    background-size: 26px 26px;
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────
+   Keyframes
+   ───────────────────────────────────────────────────────────── */
+
+@keyframes bob {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* The Boredom Button's card flip: in from edge-on, one overshoot,
+   settle. 500ms on the bounce curve. */
+@keyframes dealin {
+  0% {
+    transform: rotateY(90deg) scale(0.8);
+    opacity: 0;
+  }
+  70% {
+    transform: rotateY(-8deg) scale(1.04);
+    opacity: 1;
+  }
+  100% {
+    transform: rotateY(0) scale(1);
+    opacity: 1;
+  }
+}
+
+/* Reduced motion swaps the flip for a cross-fade. */
+@keyframes dealfade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes confetti-fall {
+  0% {
+    opacity: 1;
+    transform: translate(0, 0) rotate(0deg);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(var(--drift, 0px), 320px) rotate(540deg);
+  }
+}
+
+/* A sticker landing: overshoot, then settle. */
+@keyframes stick {
+  0% {
+    transform: scale(0.4);
+  }
+  60% {
+    transform: scale(1.18);
+  }
+  100% {
+    transform: scale(1);
+  }
 }

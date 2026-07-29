@@ -1,65 +1,167 @@
+import Link from "next/link";
 import Image from "next/image";
+import { Hero } from "@/components/sections/Hero";
+import { Section, SectionHeading, Reveal } from "@/components/sections/Section";
+import { CordDivider } from "@/components/chrome/CordDivider";
+import { PropPlayground } from "@/components/chrome/PropPlayground";
+import { UnplugExtras } from "@/components/sections/UnplugExtras";
+import { Slot } from "@/components/content/Slot";
+import { EmailForm } from "@/components/primitives/EmailForm";
+import { ButtonLink } from "@/components/primitives/Button";
+import { IconDisc } from "@/components/art/Icon";
+import { AUTHOR } from "@/content/author";
+import { featuredBook } from "@/content/books";
+
+/* The homepage — and the book's only page.
+   ─────────────────────────────────────────────────────────────
+   There was a separate /books/[slug] here, and it was redundant with
+   this page: both showed the title, the cover and a Boredom Button. One
+   book doesn't need two pages saying so. Everything the book page had —
+   the buy links, the excerpt slot, the full set of interactive extras —
+   now lives here, in reading order:
+
+     hero (title + buy/try) → what's in it → try it free (#extras,
+     the five interactive features + FAQ) → read a bit / what's still
+     needed → who wrote it → the free checklist.
+
+   The praise / events / latest-news teasers are gone with their pages —
+   there was nothing real to put in them. */
+
+const PRINCIPLE_ICONS = ["time", "indoor", "prep", "free"] as const;
 
 export default function Home() {
+  const book = featuredBook();
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+    <div className="relative">
+      <PropPlayground />
+
+      <Hero />
+
+      {/* ── What's actually in it ────────────────────────── */}
+      <Section field="cream" labelledBy="inside-heading">
+        <Reveal>
+          <SectionHeading id="inside-heading" on="cream">
+            What&apos;s in it
+          </SectionHeading>
+          <p className="mt-3 max-w-[58ch] text-[19px] font-bold md:text-[21px]">
+            {book.pages} pages, {book.tags[0].toLowerCase()} on purpose. Four things
+            every one of the 101 has in common.
           </p>
+        </Reveal>
+
+        <ul className="m-0 mt-8 grid list-none grid-cols-1 gap-5 p-0 md:grid-cols-2">
+          {AUTHOR.principles.map((p, i) => (
+            <li key={p.title}>
+              <Reveal>
+                <div className="flex h-full items-start gap-4 rounded-lg bg-sun-yellow p-5 md:p-6">
+                  <IconDisc name={PRINCIPLE_ICONS[i]} size={56} className="shrink-0" />
+                  <div>
+                    <h3 className="m-0 text-[21px] leading-[1.2] font-black">
+                      {p.title}
+                    </h3>
+                    <p className="mt-2 text-[18px] leading-[1.5] font-semibold">
+                      {p.body}
+                    </p>
+                  </div>
+                </div>
+              </Reveal>
+            </li>
+          ))}
+        </ul>
+      </Section>
+
+      {/* ── Try it free: the five interactive features + FAQ ── */}
+      <UnplugExtras dividerField="cream" />
+
+      {/* ── Read a bit / what's still needed ─────────────── */}
+      {(book.excerptSlot || book.slots.length > 0) && (
+        <>
+          <CordDivider />
+          <Section field="cream" labelledBy="needed-heading">
+            <Reveal>
+              <SectionHeading id="needed-heading" on="cream">
+                Read a bit
+              </SectionHeading>
+              <p className="mt-3 max-w-[58ch] text-[19px] font-bold">
+                A page or two of the real thing does more than any description.
+              </p>
+            </Reveal>
+            <div className="mt-7 grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
+              {book.excerptSlot && <Slot slot={book.excerptSlot} />}
+              {book.slots.map((s) => (
+                <Slot key={s.need} slot={s} />
+              ))}
+            </div>
+          </Section>
+        </>
+      )}
+
+      {/* ── Who wrote it ─────────────────────────────────── */}
+      <Section field="yellow" labelledBy="who-heading">
+        <div className="grid gap-8 lg:grid-cols-[280px_1fr] lg:gap-12">
+          <Reveal>
+            <Slot slot={AUTHOR.headshotSlot} />
+          </Reveal>
+          <Reveal>
+            <SectionHeading id="who-heading">Who wrote it</SectionHeading>
+            <p className="font-script mt-3 text-[34px] leading-[1.05]">
+              {AUTHOR.name}
+            </p>
+            <div className="mt-4 max-w-[62ch]">
+              {AUTHOR.shortBio.map((para) => (
+                <p
+                  key={para.slice(0, 20)}
+                  className="mt-3 text-[19px] leading-[1.6] font-semibold"
+                >
+                  {para}
+                </p>
+              ))}
+            </div>
+            <ButtonLink
+              href="/about"
+              variant="secondary"
+              size="block"
+              className="mt-5"
+            >
+              More about Wanda
+            </ButtonLink>
+          </Reveal>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
+      </Section>
+
+      {/* ── The free checklist ───────────────────────────── */}
+      <Section field="cream" labelledBy="checklist-heading">
+        <div className="grid gap-8 lg:grid-cols-[1fr_360px] lg:gap-12">
+          <Reveal>
+            <SectionHeading id="checklist-heading" on="cream">
+              {AUTHOR.newsletter.heading}
+            </SectionHeading>
+            <p className="mt-3 max-w-[52ch] text-[19px] font-bold md:text-[21px]">
+              {AUTHOR.newsletter.blurb}
+            </p>
+            <div className="mt-5 max-w-[420px]">
+              <EmailForm />
+            </div>
+            <p className="mt-4 text-[18px] font-bold">
+              Or just{" "}
+              <Link href="/checklist" className="font-black">
+                grab it without an email
+              </Link>{" "}
+              — genuinely fine.
+            </p>
+          </Reveal>
+          <Reveal>
             <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
+              src="/newsletter.png"
+              alt="A checklist pinned to a fridge, next to crayons and a paper plane"
+              width={1024}
+              height={1024}
+              className="h-auto w-full rounded-lg"
             />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+          </Reveal>
         </div>
-      </main>
+      </Section>
     </div>
   );
 }
