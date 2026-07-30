@@ -3,9 +3,9 @@
 Read this before showing the site to Wanda. It exists so nobody is
 surprised in the meeting.
 
-Three categories: **verified** (from a published source), **draft** (we
-wrote it, needs her sign-off), and **missing** (renders as a dashed card
-on the page asking for it).
+Three categories: **verified** (from a published source, or supplied by
+Wanda directly), **draft** (we wrote it, needs her sign-off), and
+**missing** (renders as a dashed card on the page asking for it).
 
 ---
 
@@ -36,41 +36,35 @@ The cover image is the real cover.
 > **Hartfield** on the cover and in the Amazon URL. The site uses
 > Hartfield. Please confirm.
 
+### The biography — now author-supplied, no longer draft
+
+Wanda confirmed the detail this project could only half-verify from an
+old edition's back-cover copy: she was **"Miss Wanda," the host/teacher
+of *Romper Room***, working the show's "Magic Mirror" segment. She grew
+up in Sylvan Lake, Alberta, Canada, with two sisters, and later tested
+the book's activities as the mother of two sons — her stated belief is
+that a child taught to self-entertain needs electronics less.
+
+That replaces the placeholder bio that stood in previously (which was
+deliberately written about the book's position rather than her life,
+precisely so nothing in it could be wrong). The short and long bios in
+`src/content/author.ts` are her words now, not ours — see the file's
+header comment. Nothing about her biography remains draft.
+
 ---
 
-## Draft — we wrote this, she needs to approve or replace it
+## Draft — we wrote this, it still needs her sign-off
 
 All of it lives in `src/content/author.ts` and `src/content/unplug.ts`.
 
 | What | Where it shows | Note |
 |---|---|---|
-| Short bio (2 paragraphs) | Homepage, "Who wrote it" | About the book's purpose, not her life |
-| Long bio (4 paragraphs) | `/about` | Built around the book's own stated position |
 | Tagline | Footer | "One hundred and one things to do instead." |
-| The four principles | Homepage + `/about` | Our reading of what the book is for |
-| Back-cover blurb | `/books/unplug` | Our draft; the real one should replace it |
+| The four principles | Homepage + `/about` | Our reading of what the book is for — thematic, not biographical |
+| Back-cover blurb | Homepage | Our draft; the real one should replace it |
 | Checklist name and pitch | `/checklist`, homepage | "Ten to start with" |
-| FAQ — 3 questions and answers | `/books/unplug` | Includes specific counts (38 scale both ways, 61 need nothing) that we invented — **these need checking or cutting** |
+| FAQ — 3 questions and answers | Homepage | Includes specific counts (38 scale both ways, 61 need nothing) that we invented — **these need checking or cutting** |
 | Site voice and microcopy | Everywhere | Buttons, empty states, validation messages |
-
-### The bio was deliberately written "thin"
-
-The design mockups came with a detailed biography — twenty-two years
-teaching Reception through Year 6, three children of her own, "Bored Jar"
-workshops for 400+ families, based in the UK, prices in pounds. **None of
-that was sourced. It was the designer's filler.** It also conflicts with
-the only published description we could find of this author: the earlier
-edition of the book (*Unplug! 101 Ways to Pull Your Kids Away from
-Television*, ISBN 9781553958055) describes her as a former television
-producer who taught on *Romper Room*.
-
-We removed the invented version rather than show her a fabricated
-account of her own career. What replaced it is deliberately about the
-book rather than about her, so there is nothing in it she has to correct
-— only things she may wish to add.
-
-**If she confirms the television-producer background, that's a much
-stronger bio and we should rewrite around it.**
 
 ---
 
@@ -80,7 +74,7 @@ stronger bio and we should rewrite around it.**
 design mockups, seven we wrote to fill out the grid. Their numbers (07,
 23, 58, 91…) are not the book's numbering.
 
-They drive five interactive features on `/books/unplug#extras`: the
+They drive five interactive features on the homepage (`/#extras`): the
 filterable activity grid, the Boredom Button, the screen-time swap, the
 sticker chart, and the ten shown on `/checklist`.
 
@@ -98,15 +92,15 @@ page images.
 
 | What | Where |
 |---|---|
-| An author photo | Homepage, `/about` — the single biggest gap |
+| An author photo | Homepage, `/about` — the single biggest gap now |
 | Public contact email | `/contact` |
 | Social links | `/contact`, footer |
-| Real back-cover blurb | `/books/unplug` |
-| Sample pages / excerpt | `/books/unplug` |
-| Photos of real spreads | `/books/unplug` Peek Inside |
+| Real back-cover blurb | Homepage |
+| Sample pages / excerpt | Homepage |
+| Photos of real spreads | Homepage, Peek Inside |
 | The checklist PDF + which ten activities | `/checklist` |
-| Whether there's an ebook or audiobook | `/books/unplug` |
-| Other retailers beyond Amazon | `/books/unplug` |
+| Whether there's an ebook or audiobook | Homepage |
+| Other retailers beyond Amazon | Homepage |
 
 Seven image slots carry a ready-to-paste Midjourney prompt. Author
 photos and the cover never do — generating those would fabricate a

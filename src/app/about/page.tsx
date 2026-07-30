@@ -19,10 +19,9 @@ export const metadata: Metadata = {
    Caveat reserved for the name, 62ch measure. This is where a sceptical
    parent decides, so it stays quiet — no draggable props, no confetti.
 
-   The bio here is OUR DRAFT (see content/author.ts and
-   DRAFT_CONTENT.md). It is written about the book's position rather
-   than asserting unverified facts about her life, because the mockup's
-   version did the opposite and got it wrong. */
+   The bio is author-supplied (content/author.ts), not a placeholder —
+   see the header comment there for what's confirmed. The mockup's
+   invented British-teacher backstory is long gone; this replaced it. */
 
 const PRINCIPLE_ICONS = ["time", "indoor", "prep", "free"] as const;
 
@@ -105,11 +104,10 @@ export default function AboutPage() {
             Over to you
           </SectionHeading>
           <p className="mt-3 max-w-[58ch] text-[19px] font-bold">
-            Two things on this page still need you.
+            One thing on this page still needs you.
           </p>
         </Reveal>
-        <div className="mt-7 grid grid-cols-1 gap-5 md:grid-cols-2">
-          <Slot slot={AUTHOR.bioConfirmSlot} />
+        <div className="mt-7 max-w-[420px]">
           <Slot slot={AUTHOR.headshotSlot} />
         </div>
       </Section>

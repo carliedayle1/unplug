@@ -7,19 +7,24 @@ import { authorPhoto } from "./placeholders";
    The design mockups shipped a biography that was pure invention:
    "twenty-two years teaching Reception through Year 6", three children,
    "Bored Jar" workshops for 400+ families, a Leeds testimonial, prices
-   in pounds. None of it is sourced, and it contradicts the published
+   in pounds. None of it was sourced, and it contradicted the published
    record — the earlier edition of this book (Unplug! 101 Ways to Pull
    Your Kids Away from Television, ISBN 9781553958055) describes the
    author as a former television producer who taught on Romper Room.
-   That fiction has been removed rather than shown to her.
+   That fiction was removed rather than shown to her.
 
-   What's here now:
-     · FACT     — name (per the cover), and the book's own subject matter.
-     · DRAFT    — bio prose and milestones, marked below and listed in
-                  DRAFT_CONTENT.md. Written to be plausible and on-brand,
-                  deliberately light on specifics we can't stand behind.
-                  Every line needs her confirmation.
-     · SLOT     — her photo, and anything factual we'd only be guessing at.
+   `shortBio` and `longBio` below are now AUTHOR-SUPPLIED, not draft —
+   she confirmed the Romper Room detail directly ("Miss Wanda", the
+   host/teacher on Romper Room's Magic Mirror segment), which is exactly
+   what the older edition's record implied. The philosophical paragraphs
+   (why the book takes the position it does) were drafted here first and
+   she kept them essentially as written; only the biographical opening
+   is new. Nothing in either field is invented — treat this content as
+   settled, not a placeholder awaiting sign-off.
+
+   Still open:
+     · SLOT — her photo (headshotSlot). Nothing else on this page is
+              missing now that the bio is real.
 
    Nothing attributed to a third party is drafted anywhere in this
    project: no review quotes, no awards, no press, no bestseller claim. */
@@ -29,22 +34,23 @@ export const AUTHOR = {
   name: "Wanda Kanten Hartfield",
   role: "Author",
 
-  /** DRAFT — from the book's subject, not from a source about her. */
   tagline: "One hundred and one things to do instead.",
 
-  /* DRAFT bio, short. Deliberately about the book and the problem it
-     solves rather than asserting facts about her life. */
+  /* Condensed for the homepage teaser (footer/50–100 word slot). Built
+     only from sentences that also appear in longBio below — nothing
+     added, just shortened for a smaller space. */
   shortBio: [
-    "Wanda Kanten Hartfield writes about the gap between wanting your kids off a screen and having something better to hand them.",
-    "UNPLUG! is her answer to it: 101 activities that need no preparation, no shopping trip and no argument — just the next thing to try.",
+    "Wanda Kanten Hartfield was raised in Sylvan Lake, Alberta, Canada, where she and her sisters spent long winter days creating their own entertainment. She went on to become “Miss Wanda,” host of Romper Room, delighting millions of children in the Magic Mirror — then tested her ideas for real as the mother of two sons.",
+    "UNPLUG! is where those ideas landed: 101 things to do instead, with no statistics, no guilt, and no suggestion you've already failed — just the next thing to try.",
   ],
 
-  /* DRAFT bio, long. Same principle: grounded in the book's own
-     position, which she states plainly in its opening pages —
-     that the rules are the parent's to set. */
+  /* In her own words, supplied directly — not drafted here. */
   longBio: [
-    "Wanda Kanten Hartfield writes for the parent standing in the kitchen at five o'clock, aware that the tablet has been on for a while, and out of ideas.",
-    "Her position is an unfashionably direct one. The argument over children's screen time tends to circle: the networks blame the parents, the parents blame the networks, and everyone agrees something ought to be done. She doesn't find that useful. Television and phones are businesses, and businesses are not going to raise anyone's children. The rules are the parent's to set — and rules are easier to keep when there is something waiting on the other side of them.",
+    "Wanda Kanten Hartfield was raised in an incredibly happy home in Sylvan Lake, Alberta, Canada. There, she, her two sisters and her mother spent long winter days creating their own entertainment.",
+    "Loving children, she became “Miss Wanda,” the host/teacher of Romper Room — a TV show that allowed millions of children to delight in being found in the “Magic Mirror.”",
+    "Becoming a mother of two sons, Wanda was able to test her projects and ideas in the real world of her children. She was firm in the belief that if you teach your child to self-entertain, dependence on all electronics is diminished.",
+    "Wanda writes for the parent standing in the kitchen at five o'clock, aware that the tablet has been on for a while, and out of ideas.",
+    "Her position is an unfashionably direct one. The argument over children's screen time tends to circle: the networks blame the parents, the parents blame the networks, and everyone agrees something ought to be done. She doesn't find that useful. Television and phones are businesses, and businesses are not going to raise anyone's children. The rules are the parent's to set — and rules are easier to keep when there is something waiting on the other side.",
     "So UNPLUG! is not a book about screens at all. It is a book of things to do: one hundred and one of them, arranged so a tired adult can find one that fits the twenty minutes and the materials actually available. Nothing in it requires a trip to a shop, a cleared afternoon, or a child who is already enthusiastic.",
     "The tone throughout is the one she'd use with a friend rather than an audience. No statistics about screen time. No suggestion you have already failed. Just the next thing to try, and what to do when it stops working.",
   ],
@@ -74,13 +80,6 @@ export const AUTHOR = {
   headshotSlot: authorPhoto("An author photo", {
     note: "Any reasonably lit photo you're happy with. This is the one thing on the site nobody else can supply — and a real face does more for trust here than anything we could write.",
   }),
-
-  bioConfirmSlot: {
-    need: "Your own words, replacing our draft",
-    source: "either" as const,
-    note: "Everything on this page is a draft we wrote so you can see the shape of it. Send corrections in any form — notes, a voice memo, a rewrite — and we'll set it properly. Anything you'd rather we didn't say, say so and it goes.",
-    lines: 4,
-  },
 
   /* ── Contact ────────────────────────────────────────────── */
   contact: {
