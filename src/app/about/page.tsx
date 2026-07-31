@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { PageHeader } from "@/components/chrome/PageShell";
 import { Section, SectionHeading, Reveal } from "@/components/sections/Section";
 import { CordDivider } from "@/components/chrome/CordDivider";
-import { Slot } from "@/components/content/Slot";
+import { AuthorPhoto } from "@/components/content/AuthorPhoto";
 import { ButtonLink } from "@/components/primitives/Button";
 import { IconDisc } from "@/components/art/Icon";
 import { AUTHOR } from "@/content/author";
@@ -19,9 +19,10 @@ export const metadata: Metadata = {
    Caveat reserved for the name, 62ch measure. This is where a sceptical
    parent decides, so it stays quiet — no draggable props, no confetti.
 
-   The bio is author-supplied (content/author.ts), not a placeholder —
-   see the header comment there for what's confirmed. The mockup's
-   invented British-teacher backstory is long gone; this replaced it. */
+   The bio and the photo are both real now — see the header comment in
+   content/author.ts for what's confirmed. Nothing on this page is a
+   placeholder any more; the mockup's invented British-teacher backstory
+   is long gone, and this replaced it. */
 
 const PRINCIPLE_ICONS = ["time", "indoor", "prep", "free"] as const;
 
@@ -37,7 +38,7 @@ export default function AboutPage() {
       <Section field="cream" labelledBy="bio-heading">
         <div className="grid gap-8 lg:grid-cols-[300px_1fr] lg:gap-12">
           <Reveal>
-            <Slot slot={AUTHOR.headshotSlot} />
+            <AuthorPhoto className="w-[220px] lg:w-full" priority />
             <p className="font-script mt-5 text-[36px] leading-[1.05]">
               {AUTHOR.name}
             </p>
@@ -95,21 +96,6 @@ export default function AboutPage() {
             </li>
           ))}
         </ul>
-      </Section>
-
-      {/* ── For the author's review ──────────────────────── */}
-      <Section field="cream" labelledBy="review-heading">
-        <Reveal>
-          <SectionHeading id="review-heading" on="cream">
-            Over to you
-          </SectionHeading>
-          <p className="mt-3 max-w-[58ch] text-[19px] font-bold">
-            One thing on this page still needs you.
-          </p>
-        </Reveal>
-        <div className="mt-7 max-w-[420px]">
-          <Slot slot={AUTHOR.headshotSlot} />
-        </div>
       </Section>
     </>
   );

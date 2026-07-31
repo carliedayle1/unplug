@@ -6,6 +6,7 @@ import { CordDivider } from "@/components/chrome/CordDivider";
 import { PropPlayground } from "@/components/chrome/PropPlayground";
 import { UnplugExtras } from "@/components/sections/UnplugExtras";
 import { Slot } from "@/components/content/Slot";
+import { AuthorPhoto } from "@/components/content/AuthorPhoto";
 import { EmailForm } from "@/components/primitives/EmailForm";
 import { ButtonLink } from "@/components/primitives/Button";
 import { IconDisc } from "@/components/art/Icon";
@@ -101,7 +102,7 @@ export default function Home() {
       <Section field="yellow" labelledBy="who-heading">
         <div className="grid gap-8 lg:grid-cols-[280px_1fr] lg:gap-12">
           <Reveal>
-            <Slot slot={AUTHOR.headshotSlot} />
+            <AuthorPhoto className="w-[200px] md:w-[240px]" />
           </Reveal>
           <Reveal>
             <SectionHeading id="who-heading">Who wrote it</SectionHeading>

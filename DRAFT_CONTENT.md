@@ -51,6 +51,13 @@ precisely so nothing in it could be wrong). The short and long bios in
 `src/content/author.ts` are her words now, not ours — see the file's
 header comment. Nothing about her biography remains draft.
 
+### The author photo — also real now
+
+`public/author_pic.jpg`, rendered via `components/content/AuthorPhoto.tsx`
+on the homepage and `/about`. It replaced the last outstanding slot on
+those pages — the "Over to you" section on `/about` that used to ask for
+it is gone, since there's nothing left to ask for.
+
 ---
 
 ## Draft — we wrote this, it still needs her sign-off
@@ -92,7 +99,6 @@ page images.
 
 | What | Where |
 |---|---|
-| An author photo | Homepage, `/about` — the single biggest gap now |
 | Public contact email | `/contact` |
 | Social links | `/contact`, footer |
 | Real back-cover blurb | Homepage |

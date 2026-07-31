@@ -1,5 +1,3 @@
-import { authorPhoto } from "./placeholders";
-
 /* Author identity, bio, contact.
    ─────────────────────────────────────────────────────────────
    READ THIS BEFORE EDITING.
@@ -22,9 +20,9 @@ import { authorPhoto } from "./placeholders";
    is new. Nothing in either field is invented — treat this content as
    settled, not a placeholder awaiting sign-off.
 
-   Still open:
-     · SLOT — her photo (headshotSlot). Nothing else on this page is
-              missing now that the bio is real.
+   The real photo landed too (public/author_pic.jpg) — see
+   components/content/AuthorPhoto.tsx. There is no longer a photo slot
+   here; nothing on the About page is a placeholder any more.
 
    Nothing attributed to a third party is drafted anywhere in this
    project: no review quotes, no awards, no press, no bestseller claim. */
@@ -75,11 +73,6 @@ export const AUTHOR = {
       body: "No screen-time statistics, no diagnosis, no guilt. You came for something to do; that's what the book hands you.",
     },
   ],
-
-  /* ── Photos ─────────────────────────────────────────────── */
-  headshotSlot: authorPhoto("An author photo", {
-    note: "Any reasonably lit photo you're happy with. This is the one thing on the site nobody else can supply — and a real face does more for trust here than anything we could write.",
-  }),
 
   /* ── Contact ────────────────────────────────────────────── */
   contact: {
