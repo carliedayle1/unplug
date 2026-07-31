@@ -2,6 +2,10 @@ import type { Metadata } from "next";
 import { PageHeader } from "@/components/chrome/PageShell";
 import { Section, SectionHeading, Reveal } from "@/components/sections/Section";
 import { CordDivider } from "@/components/chrome/CordDivider";
+import {
+  AboutBioProps,
+  AboutStandsProps,
+} from "@/components/chrome/AboutFloatingProps";
 import { AuthorPhoto } from "@/components/content/AuthorPhoto";
 import { ButtonLink } from "@/components/primitives/Button";
 import { IconDisc } from "@/components/art/Icon";
@@ -17,7 +21,10 @@ export const metadata: Metadata = {
    ─────────────────────────────────────────────────────────────
    The calmest page in the site: cream field, one pop (the divider),
    Caveat reserved for the name, 62ch measure. This is where a sceptical
-   parent decides, so it stays quiet — no draggable props, no confetti.
+   parent decides, so it stays quiet — still no confetti, and the
+   floating props (AboutFloatingProps, nested in the photo column below)
+   are deliberately not draggable, unlike the homepage's set: they add
+   motion without inviting the same hands-on interaction.
 
    The bio and the photo are both real now — see the header comment in
    content/author.ts for what's confirmed. Nothing on this page is a
@@ -43,6 +50,7 @@ export default function AboutPage() {
               {AUTHOR.name}
             </p>
             <p className="text-label mt-1.5 text-ink-muted uppercase">{AUTHOR.role}</p>
+            <AboutBioProps className="mt-7" />
           </Reveal>
 
           <Reveal>
@@ -72,10 +80,15 @@ export default function AboutPage() {
       {/* ── What the book stands for ─────────────────────── */}
       <Section field="yellow" labelledBy="stands-heading">
         <Reveal>
-          <SectionHeading id="stands-heading">What it stands for</SectionHeading>
-          <p className="mt-3 max-w-[58ch] text-[19px] font-bold md:text-[21px]">
-            Four rules the whole of {book.title} follows.
-          </p>
+          <div className="flex flex-wrap items-end justify-between gap-6">
+            <div>
+              <SectionHeading id="stands-heading">What it stands for</SectionHeading>
+              <p className="mt-3 max-w-[58ch] text-[19px] font-bold md:text-[21px]">
+                Four rules the whole of {book.title} follows.
+              </p>
+            </div>
+            <AboutStandsProps className="shrink-0" />
+          </div>
         </Reveal>
         <ul className="m-0 mt-8 grid list-none grid-cols-1 gap-5 p-0 md:grid-cols-2">
           {AUTHOR.principles.map((p, i) => (
