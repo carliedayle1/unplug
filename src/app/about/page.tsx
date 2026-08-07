@@ -7,6 +7,7 @@ import {
   AboutStandsProps,
 } from "@/components/chrome/AboutFloatingProps";
 import { AuthorPhoto } from "@/components/content/AuthorPhoto";
+import { PhotoGallery } from "@/components/content/PhotoGallery";
 import { ButtonLink } from "@/components/primitives/Button";
 import { IconDisc } from "@/components/art/Icon";
 import { AUTHOR } from "@/content/author";
@@ -109,6 +110,24 @@ export default function AboutPage() {
             </li>
           ))}
         </ul>
+      </Section>
+
+      <CordDivider />
+
+      {/* ── Photographs ──────────────────────────────────── */}
+      <Section field="cream" labelledBy="album-heading">
+        <Reveal>
+          <SectionHeading id="album-heading" on="cream">
+            A few moments
+          </SectionHeading>
+          <p className="mt-3 max-w-[58ch] text-[19px] font-bold md:text-[21px]">
+            A lifetime of finding things for children to do — first her own, then
+            theirs.
+          </p>
+        </Reveal>
+        <div className="mt-9">
+          <PhotoGallery />
+        </div>
       </Section>
     </>
   );
