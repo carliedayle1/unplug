@@ -14,7 +14,6 @@ import { ActivityCard, EmptyCardSlot } from "@/components/primitives/ActivityCar
 import { Accordion } from "@/components/primitives/Accordion";
 import { SnapshotProvider, useSnapshot } from "@/components/sections/ActivitySnapshot";
 import { Slider } from "@/components/primitives/Slider";
-import { EmailForm } from "@/components/primitives/EmailForm";
 import { OutlineNumeral } from "@/components/primitives/OutlineNumeral";
 import { Icon } from "@/components/art/Icon";
 import {
@@ -32,7 +31,7 @@ import { FAQ, THE_101 } from "@/content/unplug";
 
 /* Deliverable B — the component library, every variant × state.
    Live where the mockups were live: filters, slider, accordion,
-   email form, the snapshot dialog. Every activity shown is a real one
+   the snapshot dialog. Every activity shown is a real one
    from the book (#44 Mind Reading, #09 Ducks in a Row, …). */
 
 // Present in the data; the check script guarantees it.
@@ -325,13 +324,6 @@ function Library() {
             maxLabel="6+"
             valueText={`${hours} hours`}
           />
-        </div>
-      </Section>
-
-      {/* ── EMAIL — LIVE ──────────────────────────────────── */}
-      <Section title="Email capture" note="Live — try an empty field, a malformed address, then a real one. The status line is aria-live.">
-        <div className="max-w-[420px]">
-          <EmailForm />
         </div>
       </Section>
 

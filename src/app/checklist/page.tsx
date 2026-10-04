@@ -3,7 +3,6 @@ import Image from "next/image";
 import { PageHeader } from "@/components/chrome/PageShell";
 import { Section, SectionHeading, Reveal } from "@/components/sections/Section";
 import { Slot } from "@/components/content/Slot";
-import { EmailForm } from "@/components/primitives/EmailForm";
 import { ButtonLink } from "@/components/primitives/Button";
 import { PrintButton } from "@/components/primitives/PrintButton";
 import { OutlineNumeral } from "@/components/primitives/OutlineNumeral";
@@ -15,22 +14,23 @@ import type { Pop } from "@/lib/activities";
 
 export const metadata: Metadata = {
   title: "Free checklist",
-  description: AUTHOR.newsletter.blurb,
+  description: AUTHOR.checklist.blurb,
 };
 
 /* /checklist — the lead magnet.
    ─────────────────────────────────────────────────────────────
-   The no-email download is deliberate and must stay: it costs a few
-   addresses and buys the reader's trust, which is the whole point.
-   Don't gate it.
+   No email is asked for, anywhere. That's deliberate: it buys the
+   reader's trust, which is the whole point of a free checklist. Don't add
+   an email gate.
 
    The ten are real activities from the book (TEN_TO_START in
    content/activities.ts) — our DRAFT picks: ones a kid can run, with
    everyday materials, in any season. Wanda can swap any of them.
 
-   "Print the checklist" prints this list alone (see lib/printOnly.ts)
-   and replaces a "Download" link that pointed at a PDF that didn't
-   exist. Printing from the browser is also the better download: it's the
+   "Print or save as PDF" prints this list alone (see lib/printOnly.ts);
+   the browser's print window does the PDF. It replaces a "Download" link
+   that pointed at a PDF that didn't exist, and an "email it to me" form
+   that had no mail service behind it. Printing from the browser is also the better download: it's the
    page you're looking at, there's no file to host, and it can't go out of
    step with the data. */
 
@@ -45,8 +45,8 @@ export default function ChecklistPage() {
     <>
       <div className="bg-sun-yellow dot-grid">
         <PageHeader
-          title={AUTHOR.newsletter.heading}
-          lead={AUTHOR.newsletter.blurb}
+          title={AUTHOR.checklist.heading}
+          lead={AUTHOR.checklist.blurb}
         />
       </div>
 
@@ -100,7 +100,7 @@ export default function ChecklistPage() {
 
             <Reveal>
               <div className="mt-6 flex flex-wrap gap-3">
-                <PrintButton what="checklist">Print the checklist</PrintButton>
+                <PrintButton what="checklist">Print or save as PDF</PrintButton>
                 {/* Points at the retailer, not the book's own page — the
                     reader who wants all 101 wants to buy it, not read a
                     second description of it. */}
@@ -115,28 +115,22 @@ export default function ChecklistPage() {
                   All 101 are in the book — {BUY_LABEL}
                 </ButtonLink>
               </div>
+              {/* Every browser's print window has a "Save as PDF" option, so
+                  this one button covers paper and download alike. */}
+              <p className="mt-3 mb-0 text-[17px] font-semibold text-ink-muted print:hidden">
+                Want a PDF? In the print window, choose &ldquo;Save as PDF&rdquo; as the printer.
+              </p>
             </Reveal>
           </div>
 
           <div>
-            <Reveal>
-              <div className="rounded-xl bg-cream p-5 shadow-[0_6px_0_var(--color-sun-deep)] md:p-6">
-                <h2 className="font-display m-0 text-[26px] font-bold">
-                  Rather have it emailed?
-                </h2>
-                <p className="mt-2 text-[18px] font-semibold">
-                  One email with the checklist attached. Nothing else, ever.
-                </p>
-                <EmailForm />
-              </div>
-            </Reveal>
             <Reveal>
               <Image
                 src="/newsletter.png"
                 alt="A checklist pinned to a fridge, next to crayons and a paper plane"
                 width={1024}
                 height={1024}
-                className="mt-5 h-auto w-full rounded-lg"
+                className="h-auto w-full rounded-lg"
               />
             </Reveal>
           </div>
@@ -170,7 +164,7 @@ export default function ChecklistPage() {
             </h2>
           )}
           {pending && <Slot slot={MEDIA_SLOTS.printables} />}
-          <Slot slot={AUTHOR.newsletter.giveawaySlot} />
+          <Slot slot={AUTHOR.checklist.picksSlot} />
         </div>
       </Section>
     </>

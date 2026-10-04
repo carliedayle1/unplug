@@ -7,13 +7,15 @@ export const metadata: Metadata = {
   robots: { index: false },
 };
 
-/* Intake §11 says we handle the privacy and terms language, and that no
-   action is needed from the author. Until the newsletter provider is
-   chosen we can't state who processes reader emails, so this is an
-   honest stub rather than a boilerplate policy that might be wrong.
+/* Privacy — what's actually true of the site.
+   ─────────────────────────────────────────────────────────────
+   The site collects nothing. There's no form, no account, no analytics
+   and no cookies of ours. (An email form used to be here; it was removed,
+   so this page no longer has a provider to name.) The interactive extras
+   remember a few choices in the visitor's own browser, and that's all.
 
-   TODO(legal): once the provider is confirmed (§6), state what's
-   collected, who processes it, retention, and how to unsubscribe. */
+   If anything that collects data is ever added — an email list,
+   analytics — this page has to change in the same commit. */
 
 export default function PrivacyPage() {
   return (
@@ -27,19 +29,19 @@ export default function PrivacyPage() {
       <Section field="cream">
         <div className="max-w-[68ch]">
           <p className="text-[19px] leading-[1.6] font-semibold">
-            This site collects one thing: an email address, and only if you type it
-            into the checklist form yourself. It is used to send the checklist. There
-            is no series, and you can unsubscribe from any email in one click.
+            This site doesn&apos;t collect anything about you. There are no forms, no
+            accounts, no tracking and no cookies of ours, and nothing you type is sent
+            anywhere.
           </p>
           <p className="mt-4 text-[19px] leading-[1.6] font-semibold">
-            Nothing else is tracked. The activity filters and the sticker chart
-            remember your choices in your own browser&apos;s local storage — that data
-            never leaves your device and clearing your browser data removes it.
+            A few things remember your choices in your own browser&apos;s local storage:
+            the activity filters, the sticker chart and the dream planner. That data
+            never leaves your device, and clearing your browser data removes it. The
+            secret-language translator works entirely in your browser and keeps nothing.
           </p>
           <p className="mt-4 text-[19px] leading-[1.6] font-semibold">
-            The full policy will name the email provider once it&apos;s chosen. Until
-            then this page deliberately says only what is actually true of the site as
-            it stands.
+            The &ldquo;Buy on Amazon&rdquo; buttons take you to Amazon, whose own
+            privacy policy applies there.
           </p>
         </div>
       </Section>

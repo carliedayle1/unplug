@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import Image from "next/image";
 import { Hero } from "@/components/sections/Hero";
 import { Section, SectionHeading, Reveal } from "@/components/sections/Section";
@@ -8,7 +7,6 @@ import { PropPlayground } from "@/components/chrome/PropPlayground";
 import { UnplugExtras } from "@/components/sections/UnplugExtras";
 import { Slot } from "@/components/content/Slot";
 import { AuthorPhoto } from "@/components/content/AuthorPhoto";
-import { EmailForm } from "@/components/primitives/EmailForm";
 import { ButtonLink } from "@/components/primitives/Button";
 import { IconDisc } from "@/components/art/Icon";
 import { AUTHOR } from "@/content/author";
@@ -191,21 +189,16 @@ export default function Home() {
         <div className="grid gap-8 lg:grid-cols-[1fr_360px] lg:gap-12">
           <Reveal>
             <SectionHeading id="checklist-heading" on="cream">
-              {AUTHOR.newsletter.heading}
+              {AUTHOR.checklist.heading}
             </SectionHeading>
             <p className="mt-3 max-w-[52ch] text-[19px] font-bold md:text-[21px]">
-              {AUTHOR.newsletter.blurb}
+              {AUTHOR.checklist.blurb}
             </p>
-            <div className="mt-5 max-w-[420px]">
-              <EmailForm />
-            </div>
-            <p className="mt-4 text-[18px] font-bold">
-              Or just{" "}
-              <Link href="/checklist" className="font-black">
-                grab it without an email
-              </Link>{" "}
-              — genuinely fine.
-            </p>
+            {/* No email asked for: the checklist page prints, or saves as a
+                PDF, straight from the browser. */}
+            <ButtonLink href="/checklist" size="hero" className="mt-6">
+              Get the checklist
+            </ButtonLink>
           </Reveal>
           <Reveal>
             <Image

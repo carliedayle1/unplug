@@ -133,7 +133,7 @@ copy claims the book is guilt-free.)
 | A sample page / excerpt of real text | Homepage |
 | Is the ebook on sale? (The copyright page lists an ISBN) | Homepage |
 | Other retailers beyond Amazon | Homepage |
-| Which ten for the checklist, and where the emails should go | `/checklist` |
+| Which ten for the checklist | `/checklist` |
 
 ### Real pages — approved
 

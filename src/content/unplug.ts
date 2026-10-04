@@ -199,25 +199,6 @@ export const PEEK = {
   introPending: "Six spreads from the book. Tap a page to see what's on it.",
 } as const;
 
-export const PRINTABLE = {
-  heading: "Ten to start with",
-  body: "A one-page checklist of ten activities from the book — easy ones to say yes to. Print it, stick it on the fridge.",
-  emailLabel: "Email",
-  placeholder: "you@example.com",
-  submit: "Send the checklist",
-  /* The escape hatch is deliberate: it costs a few addresses and buys
-     the parent's trust, which is the whole point of the section. Do not
-     gate the download to improve conversion. */
-  escapeHatchPrefix: "Or just ",
-  escapeHatchLink: "download it without an email",
-  escapeHatchSuffix: " — genuinely fine.",
-  idle: "One checklist, one email. Nothing else, ever.",
-  empty: "Pop an address in and it's yours.",
-  invalid: "That address looks unfinished — mind checking?",
-  sent: (email: string) => `✓ On its way to ${email} — one email, no series.`,
-  failed: "That didn't send — mind trying once more?",
-} as const;
-
 /* FAQ.
    ─────────────────────────────────────────────────────────────
    DRAFT copy, but every claim in it is now checked against the book.

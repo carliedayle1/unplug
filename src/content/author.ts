@@ -113,19 +113,24 @@ export const AUTHOR = {
 
   copyright: `© ${new Date().getFullYear()} Wanda Kanten Hartfield`,
 
-  /* ── Newsletter ─────────────────────────────────────────── */
-  newsletter: {
+  /* ── The free checklist ─────────────────────────────────────
+     Print-only, deliberately. There used to be an "email it to me" form;
+     it never had a mail service behind it, so it said "on its way" and
+     sent nothing. It was removed rather than left lying. Printing (or
+     "Save as PDF" in the print window) gives the same page, with no
+     address asked for and nothing to store. */
+  checklist: {
     heading: "Ten to start with",
     blurb:
-      "A one-page checklist of ten activities from the book — the easiest ones to say yes to. Print it, stick it on the fridge, work down it.",
-    giveawaySlot: {
-      need: "Which ten, and where the emails should go",
-      source: "either" as const,
-      note: "The checklist is live on this page, with ten we picked from the book (a kid can run each one, and they need everyday things). Swap any you like. For the emails, tell us the service you use (Mailchimp, Substack, anything) or we'll suggest one.",
+      "A one-page checklist of ten activities from the book — the easiest ones to say yes to. Print it or save it as a PDF, stick it on the fridge, work down it.",
+    picksSlot: {
+      need: "Which ten?",
+      source: "author" as const,
+      note: "The checklist is live on this page, with ten we picked from the book: a kid can run each one, and they need everyday things. Swap any you like.",
     },
   },
 } as const;
 
-/* The newsletter slot's Midjourney prompt did its job — the generated
+/* The old newsletter slot's Midjourney prompt did its job — the generated
    image is at public/newsletter.png and is used directly in
    app/page.tsx. No more decorative-art slots outstanding. */

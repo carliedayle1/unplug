@@ -183,8 +183,12 @@ exists — content moved to `src/content/` early on; ignore any stale reference
 to it.)
 
 Two things are load-bearing for trust and must not be "optimised" away: the
-**no-email download** on the printable section, and the **absence of any verdict
-on the parent** in the Screen-Time Swap.
+checklist asks for **no email at all** (print, or "Save as PDF" in the print
+window), and the Screen-Time Swap delivers **no verdict on the parent**. There
+was an "email it to me" form; it had no mail service behind it and said "on its
+way" while sending nothing, so it was removed. Don't bring one back without a
+real provider, and update `/privacy` in the same change — it currently, truthfully,
+says the site collects nothing.
 
 # Gotchas found the hard way
 
