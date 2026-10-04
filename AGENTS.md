@@ -192,6 +192,14 @@ says the site collects nothing.
 
 # Gotchas found the hard way
 
+- **Production builds use webpack (`next build --webpack`); dev uses Turbopack.**
+  On the deploy host, Turbopack's build crashed processing `globals.css`: it runs
+  PostCSS/Tailwind in a separate Node process, and that process exited before
+  Turbopack could connect ("node process exited before we could connect to it",
+  exit status 0, no error output). The same build passed locally, so it's the
+  host, not the CSS. Webpack runs PostCSS in-process and builds the same CSS
+  (checked). Don't drop the flag unless the host can build with Turbopack.
+
 - **Keep `data-scroll-behavior="smooth"` on `<html>` (layout.tsx).** globals.css
   sets `scroll-behavior: smooth`, and since Next 16 Next no longer suspends it
   during navigation. Without the attribute, leaving the home page from far down
