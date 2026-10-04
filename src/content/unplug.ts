@@ -195,8 +195,8 @@ export const PEEK = {
   /* Spreads are photographs of a real product, so they only render once
      they've been approved (see content/media.ts). Until then the boxes
      are honest about being placeholders. */
-  intro: "Six real pages from the book. Swipe through, no email needed.",
-  introPending: "Six pages from the book. Tap one to see what's on it.",
+  intro: "Six real spreads from the book. Swipe through, no email needed.",
+  introPending: "Six spreads from the book. Tap a page to see what's on it.",
 } as const;
 
 export const PRINTABLE = {

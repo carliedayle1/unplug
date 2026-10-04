@@ -29,12 +29,26 @@ import {
      3. copy the approved file into public/spreads/ or public/printables/
      4. add it to APPROVED_PAGES or APPROVED_PRINTABLES */
 
+/* Approved by Wanda (October 2026): all six spreads. */
 const APPROVED_PAGES: Record<number, string> = {
-  // 75: "/spreads/page-075.webp",
+  38: "/spreads/page-038.webp",
+  39: "/spreads/page-039.webp",
+  46: "/spreads/page-046.webp",
+  47: "/spreads/page-047.webp",
+  68: "/spreads/page-068.webp",
+  69: "/spreads/page-069.webp",
+  74: "/spreads/page-074.webp",
+  75: "/spreads/page-075.webp",
+  118: "/spreads/page-118.webp",
+  119: "/spreads/page-119.webp",
+  120: "/spreads/page-120.webp",
+  121: "/spreads/page-121.webp",
 };
 
+/* Approved by Wanda (October 2026): both printables. */
 const APPROVED_PRINTABLES: Record<string, string> = {
-  // "thieves-in-the-henhouse": "/printables/thieves-in-the-henhouse.pdf",
+  "thieves-in-the-henhouse": "/printables/thieves-in-the-henhouse.pdf",
+  "weather-chart": "/printables/weather-chart.pdf",
 };
 
 export type SpreadPage = PeekPage & {

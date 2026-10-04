@@ -102,8 +102,9 @@ running site before being caught. Assume mockup copy is filler until sourced.
 
 Genuine gaps render as a `Slot` (`src/content/placeholders.ts` +
 `src/components/content/Slot.tsx`): what's needed and who supplies it, in
-language addressed to the author. Nine today: the spreads and printables asks
-disappear once everything they ask for is approved. The old "§n" intake references are gone — they were internal
+language addressed to the author. Seven today. (The spreads and printables asks
+are gone: Wanda approved both, and they come back only if a new page or
+printable is added without approval.) The old "§n" intake references are gone — they were internal
 notes and had no business on a page a client sees.
 
 ## Icons

@@ -127,8 +127,6 @@ copy claims the book is guilt-free.)
 
 | What | Where |
 |---|---|
-| **OK to show six real spreads** (pp. 38–39, 46–47, 68–69, 74–75, 118–119, 120–121) | Peek Inside. Rendered and waiting in `.pending/spreads/`; nothing is on the public site until she approves (see below) |
-| **OK to give away two printables**: the Thieves in the Henhouse boards (pp. 42–43) and the weather chart (p. 109) | `/checklist`. Print-ready PDFs of the real pages are waiting in `.pending/printables/`. The book itself tells readers to copy both. The Thieves boards *are* a game's board, the one deliberate exception to "never give a board away" |
 | Public contact email | `/contact` |
 | Social links | `/contact`, footer |
 | Real back-cover blurb | Homepage |
@@ -137,7 +135,16 @@ copy claims the book is guilt-free.)
 | Other retailers beyond Amazon | Homepage |
 | Which ten for the checklist, and where the emails should go | `/checklist` |
 
-### Showing real pages
+### Real pages — approved
+
+**Wanda approved both in October 2026** (relayed by the site owner): the six
+Peek Inside spreads (pp. 38–39, 46–47, 68–69, 74–75, 118–119, 120–121) and
+the two printables on `/checklist`, the Thieves in the Henhouse boards
+(pp. 42–43) and the weather chart (p. 109). They're live in `public/spreads/`
+and `public/printables/`. The Thieves boards *are* a game's board, the one
+deliberate exception to "never give a board away".
+
+For the record, these were the notes she saw before approving:
 
 Spreads are two facing pages, as in the printed book: side by side from
 tablet width up, stacked on a phone. The 74–75 spread (Pig Latin and Hog
@@ -146,7 +153,8 @@ But **each of those two pages prints the answer to its own small decoding
 exercise, upside-down in the corner**. The other ten pages are not trick
 or puzzle pages. Her call, and the publisher's if their layout is on the page.
 
-To publish a page or a printable, copy it from `.pending/` into
+To add or swap a page or printable later, re-run
+`scripts/render-spreads.py`, copy it from `.pending/` into
 `public/spreads/` or `public/printables/`, then list it in `APPROVED_PAGES` or
 `APPROVED_PRINTABLES` in `src/content/media.ts`. Nothing renders otherwise.
 Pages can be approved one at a time.
