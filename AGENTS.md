@@ -188,6 +188,12 @@ on the parent** in the Screen-Time Swap.
 
 # Gotchas found the hard way
 
+- **Keep `data-scroll-behavior="smooth"` on `<html>` (layout.tsx).** globals.css
+  sets `scroll-behavior: smooth`, and since Next 16 Next no longer suspends it
+  during navigation. Without the attribute, leaving the home page from far down
+  animated the scroll-to-top while the shorter page swapped in, and you landed
+  at the new page's bottom with the content off-screen ("the page is empty").
+
 - **`position: fixed` is trapped by any transformed ancestor.** On this site that
   is nearly everything: `Reveal`, the grid's `motion.li`, and the activity card's
   own hover lift. `Modal` therefore renders through a portal into `<body>`. Don't

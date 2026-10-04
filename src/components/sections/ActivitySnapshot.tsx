@@ -95,7 +95,12 @@ export function SnapshotProvider({ children }: { children: React.ReactNode }) {
         labelledBy="snapshot-title"
       >
         {/* Keyed so each activity starts with a clean "copied" note. */}
-        {activity && <SnapshotBody key={activity.n} activity={activity} onAnother={open} />}
+        {activity && <SnapshotBody
+            key={activity.n}
+            activity={activity}
+            onAnother={open}
+            onLeave={close}
+          />}
       </Modal>
     </SnapshotContext.Provider>
   );
@@ -104,9 +109,12 @@ export function SnapshotProvider({ children }: { children: React.ReactNode }) {
 function SnapshotBody({
   activity,
   onAnother,
+  onLeave,
 }: {
   activity: Activity;
   onAnother: Open;
+  /** Close the dialog before navigating away from the page. */
+  onLeave: () => void;
 }) {
   const [copied, setCopied] = useState(false);
 
@@ -152,7 +160,12 @@ function SnapshotBody({
       {/* A real link, so the activity's own page is reachable (and
           crawlable) from the dialog, not just via the sitemap. */}
       <p className="mt-3 mb-0 text-[18px] font-bold">
-        <Link href={pathFor(activity)}>{SNAPSHOT.ownPage}</Link>
+        {/* Close the dialog on the way out, so the scroll lock and the
+            #activity- hash don't outlive it. (Landing at the top of the new
+            page is the data-scroll-behavior attribute in layout.tsx.) */}
+        <Link href={pathFor(activity)} onClick={onLeave}>
+          {SNAPSHOT.ownPage}
+        </Link>
       </p>
       <p role="status" aria-live="polite" className="mt-2.5 min-h-[1.5em] text-[17px] font-bold">
         {copied ? SNAPSHOT.copied : ""}

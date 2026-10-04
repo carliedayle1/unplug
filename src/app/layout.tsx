@@ -61,6 +61,14 @@ export default function RootLayout({
     <html
       lang="en"
       className={`${baloo.variable} ${nunito.variable} ${caveat.variable}`}
+      /* globals.css sets scroll-behavior: smooth for in-page jumps (#extras,
+         #the-101). Since Next 16, Next no longer switches that off while it
+         scrolls a new page to the top — so leaving the home page from far
+         down animated the scroll while the much shorter page swapped in, and
+         you landed at the new page's bottom with its content off-screen.
+         This attribute tells Next to suspend smooth scrolling during route
+         changes (see the Next 16 upgrade guide). */
+      data-scroll-behavior="smooth"
     >
       <body>
         <a
