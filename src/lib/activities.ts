@@ -1,231 +1,101 @@
-/* The activity deck and the filter taxonomy.
+/* The activity logic: filters, the deck, and the helpers every card
+   and dialog share.
    ─────────────────────────────────────────────────────────────
-   ⚠ THESE TWELVE ACTIVITIES ARE DEMO DATA. They are NOT from the book.
+   The DATA is in src/content/activities.ts — the book's real 101.
+   This file only knows how to slice it.
 
-   Five (07, 12, 23, 58, 91) came from the design mockups; the other
-   seven we wrote to fill out the grid. The numbers are not the book's
-   numbering, and the names are not its activities.
+   Filters are the book's own shape, not an invented one. The book is
+   ungraded ("4 to 12 or more") and gives no times, so there's no age,
+   minutes, mess or cost axis here — those were the demo data's, and
+   every value on them was made up. What the book does tell us is what
+   an activity IS (its chapter), where it happens, who it takes, whether
+   a grown-up needs to be on hand, and whether it has to wait on
+   something to grow or dry. */
 
-   Because of that, the extras page carries a visible notice saying so —
-   see components/sections/UnplugExtras.tsx. When the real list arrives:
-   replace ACTIVITIES, then delete that notice and this warning.
+import {
+  ACTIVITIES,
+  CHAPTERS,
+  DECK_EXCLUDE,
+  MONTHLY,
+  TEN_TO_START,
+  slugOf,
+  type Activity,
+  type Chapter,
+  type Month,
+  type Pop,
+  type Where,
+  type Who,
+} from "@/content/activities";
 
-   Filter axes beyond where/time/mess are ours too. The design defines
-   the six groups and their colours but only ever draws Where and Mess
-   populated, so every card carries all six to make filtering real. */
+export { ACTIVITIES, CHAPTERS, TEN_TO_START, MONTHLY, slugOf };
+export type { Activity, Chapter, Month, Pop, Where, Who };
 
-export type Pop = "red" | "blue" | "teal" | "magenta" | "orange";
-export type Where = "Indoor" | "Outdoor";
-export type Age = "4–6" | "7–9" | "10–12";
-export type Prep = "None" | "5 min" | "A bit";
-export type Kids = "Solo" | "Two" | "A crowd";
-export type Cost = "Free" | "Under $5";
-/** 1 Tidy · 2 Some mess · 3 All in */
-export type MessLevel = 1 | 2 | 3;
+/* ── Lookups ───────────────────────────────────────────────── */
 
-export type Activity = {
-  /** Zero-padded, as it appears in the book and on the card. */
-  n: string;
-  name: string;
-  pop: Pop;
-  /** Human-readable, e.g. "30 min" — shown in the time badge. */
-  time: string;
-  /** Numeric minutes, for sorting/filtering. */
-  minutes: number;
-  where: Where;
-  mess: MessLevel;
-  ages: Age[];
-  prep: Prep;
-  kids: Kids[];
-  cost: Cost;
-};
+const BY_NUMBER = new Map(ACTIVITIES.map((a) => [Number(a.n), a]));
+const BY_CHAPTER = new Map(CHAPTERS.map((c) => [c.id, c]));
 
-export const MESS_LABEL: Record<MessLevel, string> = {
-  1: "Tidy",
-  2: "Some mess",
-  3: "All in",
-};
+const BY_SLUG = new Map(ACTIVITIES.map((a) => [slugOf(a), a]));
 
-/** The mess filter's pill labels, which are shorter than MESS_LABEL. */
-export const MESS_FILTER_LABEL: Record<MessLevel, string> = {
-  1: "Tidy",
-  2: "Some",
-  3: "All in",
-};
+export function bySlug(slug: string): Activity | undefined {
+  return BY_SLUG.get(slug);
+}
 
-export const ACTIVITIES: Activity[] = [
-  // ── The five from the design, verbatim ────────────────────
-  {
-    n: "07",
-    name: "Blanket fort, engineering rules",
-    pop: "blue",
-    time: "30 min",
-    minutes: 30,
-    where: "Indoor",
-    mess: 2,
-    ages: ["4–6", "7–9", "10–12"],
-    prep: "None",
-    kids: ["Two", "A crowd"],
-    cost: "Free",
-  },
-  {
-    n: "12",
-    name: "Bug hotel out of a jam jar",
-    pop: "red",
-    time: "40 min",
-    minutes: 40,
-    where: "Outdoor",
-    mess: 2,
-    ages: ["4–6", "7–9"],
-    prep: "5 min",
-    kids: ["Solo", "Two"],
-    cost: "Free",
-  },
-  {
-    n: "23",
-    name: "Shadow-tracing on the driveway",
-    pop: "teal",
-    time: "15 min",
-    minutes: 15,
-    where: "Outdoor",
-    mess: 1,
-    ages: ["4–6", "7–9"],
-    prep: "None",
-    kids: ["Two", "A crowd"],
-    cost: "Under $5",
-  },
-  {
-    n: "58",
-    name: "Kitchen-table volcano",
-    pop: "magenta",
-    time: "45 min",
-    minutes: 45,
-    where: "Indoor",
-    mess: 3,
-    ages: ["7–9", "10–12"],
-    prep: "A bit",
-    kids: ["Solo", "Two"],
-    cost: "Under $5",
-  },
-  {
-    n: "91",
-    name: "Sock-ball tournament",
-    pop: "orange",
-    time: "20 min",
-    minutes: 20,
-    where: "Indoor",
-    mess: 1,
-    ages: ["4–6", "7–9", "10–12"],
-    prep: "None",
-    kids: ["Two", "A crowd"],
-    cost: "Free",
-  },
+/** The activity's own page. */
+export const pathFor = (a: Activity) => `/activities/${slugOf(a)}`;
 
-  // ── Extending the same voice to fill the grid of twelve ───
-  {
-    n: "04",
-    name: "Paper plane distance league",
-    pop: "blue",
-    time: "20 min",
-    minutes: 20,
-    where: "Indoor",
-    mess: 1,
-    ages: ["4–6", "7–9", "10–12"],
-    prep: "None",
-    kids: ["Solo", "Two", "A crowd"],
-    cost: "Free",
-  },
-  {
-    n: "34",
-    name: "Chalk trail across the estate",
-    pop: "magenta",
-    time: "25 min",
-    minutes: 25,
-    where: "Outdoor",
-    mess: 2,
-    ages: ["4–6", "7–9"],
-    prep: "None",
-    kids: ["Two", "A crowd"],
-    cost: "Under $5",
-  },
-  {
-    n: "45",
-    name: "Torchlight shadow puppets",
-    pop: "orange",
-    time: "15 min",
-    minutes: 15,
-    where: "Indoor",
-    mess: 1,
-    ages: ["4–6", "7–9"],
-    prep: "5 min",
-    kids: ["Solo", "Two"],
-    cost: "Free",
-  },
-  {
-    n: "66",
-    name: "Pebble-painting gallery",
-    pop: "teal",
-    time: "35 min",
-    minutes: 35,
-    where: "Outdoor",
-    mess: 3,
-    ages: ["4–6", "7–9", "10–12"],
-    prep: "A bit",
-    kids: ["Solo", "Two"],
-    cost: "Under $5",
-  },
-  {
-    n: "71",
-    name: "The upside-down picnic",
-    pop: "red",
-    time: "30 min",
-    minutes: 30,
-    where: "Outdoor",
-    mess: 2,
-    ages: ["4–6", "7–9"],
-    prep: "5 min",
-    kids: ["Two", "A crowd"],
-    cost: "Free",
-  },
-  {
-    n: "83",
-    name: "Sock puppet news bulletin",
-    pop: "magenta",
-    time: "25 min",
-    minutes: 25,
-    where: "Indoor",
-    mess: 2,
-    ages: ["7–9", "10–12"],
-    prep: "5 min",
-    kids: ["Two", "A crowd"],
-    cost: "Free",
-  },
-  {
-    n: "99",
-    name: "Two-pan kitchen band",
-    pop: "orange",
-    time: "20 min",
-    minutes: 20,
-    where: "Indoor",
-    mess: 2,
-    ages: ["4–6"],
-    prep: "None",
-    kids: ["Solo", "Two", "A crowd"],
-    cost: "Free",
-  },
-];
+/** "44", "044" and 44 all find activity 44. */
+export function byNumber(n: string | number): Activity | undefined {
+  return BY_NUMBER.get(Number(n));
+}
 
-/** The Boredom Button deck — the five the design deals from. */
-export const DECK: Activity[] = ACTIVITIES.filter((a) =>
-  ["07", "23", "58", "91", "12"].includes(a.n),
+export function chapterOf(a: Activity): Chapter {
+  // Every activity's chapter id is checked by scripts/check-activities.mjs.
+  return BY_CHAPTER.get(a.chapter) as Chapter;
+}
+
+/** "page 82" or "pages 41–43". */
+export function pageLabel(a: Activity): string {
+  return a.endPage ? `pages ${a.page}–${a.endPage}` : `page ${a.page}`;
+}
+
+/** The short form for a button: "p. 82" or "pp. 41–43". */
+export function shortPage(a: Activity): string {
+  return a.endPage ? `pp. ${a.page}–${a.endPage}` : `p. ${a.page}`;
+}
+
+/** What the card falls back to when an activity has no hook of its own. */
+export function hookFor(a: Activity): string {
+  return a.hook ?? `The steps are on ${pageLabel(a)}.`;
+}
+
+export function activitiesFor(ids: string[]): Activity[] {
+  return ids.map(byNumber).filter((a): a is Activity => a !== undefined);
+}
+
+export function picksForMonth(m: number): Activity[] {
+  const month = (m >= 1 && m <= 12 ? m : 1) as Month;
+  return activitiesFor(MONTHLY[month].picks);
+}
+
+/** Activities that need nothing at all but you and a friend. Computed so
+    the FAQ's number can't drift from the data. */
+export function countNeedingNothing(): number {
+  return ACTIVITIES.filter(
+    (a) => a.needs.length === 1 && /^(nothing|your fingers)$/i.test(a.needs[0]),
+  ).length;
+}
+
+/** What the Boredom Button deals from: things a kid can start now,
+    without a grown-up on hand and without waiting days for the result.
+    Never a prank. */
+export const DECK: Activity[] = ACTIVITIES.filter(
+  (a) => !a.help && !a.takesDays && !DECK_EXCLUDE.includes(a.n),
 );
 
-/* ─────────────────────────────────────────────────────────────
-   Filter taxonomy — six groups, each colour-coded to one pop.
-   Colours and options are taken from the component library.
-   ───────────────────────────────────────────────────────────── */
+/* ── Filters ───────────────────────────────────────────────── */
 
-export type FilterKey = "where" | "age" | "mess" | "prep" | "kids" | "cost";
+export type FilterKey = "kind" | "where" | "who" | "help" | "time";
 
 export type FilterGroup = {
   key: FilterKey;
@@ -235,12 +105,23 @@ export type FilterGroup = {
 };
 
 export const FILTER_GROUPS: FilterGroup[] = [
+  {
+    key: "kind",
+    label: "Kind",
+    pop: "orange",
+    options: [
+      "Tricks & puzzles",
+      "Make it",
+      "Grow & explore",
+      "Kitchen",
+      "Games & parties",
+      "Dress-up & holidays",
+    ],
+  },
   { key: "where", label: "Where", pop: "blue", options: ["Indoor", "Outdoor"] },
-  { key: "age", label: "Age", pop: "orange", options: ["4–6", "7–9", "10–12"] },
-  { key: "mess", label: "Mess", pop: "magenta", options: ["Tidy", "Some", "All in"] },
-  { key: "prep", label: "Prep", pop: "teal", options: ["None", "5 min", "A bit"] },
-  { key: "kids", label: "Kids", pop: "blue", options: ["Solo", "Two", "A crowd"] },
-  { key: "cost", label: "Cost", pop: "teal", options: ["Free", "Under $5"] },
+  { key: "who", label: "Who", pop: "magenta", options: ["Solo", "Two", "A crowd"] },
+  { key: "help", label: "Help", pop: "teal", options: ["Kids can run it", "Grown-up helps"] },
+  { key: "time", label: "Time", pop: "red", options: ["Same day", "Takes days"] },
 ];
 
 /** A filter selection: "where:Indoor" → true. */
@@ -258,19 +139,16 @@ function selectedIn(state: FilterState, group: FilterKey): string[] {
 function matchesGroup(a: Activity, group: FilterKey, chosen: string[]): boolean {
   if (chosen.length === 0) return true;
   switch (group) {
+    case "kind":
+      return chosen.includes(chapterOf(a).kind);
     case "where":
-      return chosen.includes(a.where);
-    case "age":
-      return chosen.some((c) => a.ages.includes(c as Age));
-    case "mess":
-      return chosen.some((c) => MESS_FILTER_LABEL[a.mess] === c);
-    case "prep":
-      return chosen.includes(a.prep);
-    case "kids":
-      return chosen.some((c) => a.kids.includes(c as Kids));
-    case "cost":
-      // "Under $5" is the looser bound — a free activity also satisfies it.
-      return chosen.some((c) => (c === "Under $5" ? true : a.cost === c));
+      return chosen.some((c) => a.where.includes(c as Where));
+    case "who":
+      return chosen.some((c) => a.who.includes(c as Who));
+    case "help":
+      return chosen.some((c) => (c === "Grown-up helps" ? a.help !== undefined : a.help === undefined));
+    case "time":
+      return chosen.some((c) => (c === "Takes days" ? a.takesDays : !a.takesDays));
   }
 }
 
@@ -287,16 +165,12 @@ export function filterActivities(
 export const activeFilterCount = (state: FilterState) =>
   Object.values(state).filter(Boolean).length;
 
-/** The site shows twelve; the book has all 101. Scale the shown
-    count to the same proportion so the result line stays honest. */
-export function estimatedTotal(shown: number, allShown: number): number {
-  if (allShown === 0) return 0;
-  return Math.max(shown, Math.round((shown / allShown) * 101));
-}
+/* ── Accessibility ─────────────────────────────────────────── */
 
 /** Screen-reader label for a card. The outlined numeral is a graphic,
     so the number has to be spoken here — it must never be the only
     place a value appears. */
 export function activityLabel(a: Activity): string {
-  return `Activity ${Number(a.n)}, ${a.name}, ${a.time}, ${a.where.toLowerCase()}, mess level ${a.mess} of 3`;
+  const where = a.where.map((w) => w.toLowerCase()).join(" or ");
+  return `Activity ${Number(a.n)}, ${a.name}, ${chapterOf(a).name}, ${pageLabel(a)}, ${where}`;
 }

@@ -3,10 +3,16 @@
 import { useState } from "react";
 import { Button, ButtonLink, IconButton } from "@/components/primitives/Button";
 import { Pill } from "@/components/primitives/Pill";
-import { Badge, TimeBadge, WhereBadge, MessBadge } from "@/components/primitives/Badge";
+import {
+  Badge,
+  ChapterBadge,
+  WhereBadge,
+  HelpBadge,
+  DaysBadge,
+} from "@/components/primitives/Badge";
 import { ActivityCard, EmptyCardSlot } from "@/components/primitives/ActivityCard";
 import { Accordion } from "@/components/primitives/Accordion";
-import { Modal } from "@/components/primitives/Modal";
+import { SnapshotProvider, useSnapshot } from "@/components/sections/ActivitySnapshot";
 import { Slider } from "@/components/primitives/Slider";
 import { EmailForm } from "@/components/primitives/EmailForm";
 import { OutlineNumeral } from "@/components/primitives/OutlineNumeral";
@@ -15,15 +21,23 @@ import {
   ACTIVITIES,
   FILTER_GROUPS,
   activeFilterCount,
+  byNumber,
+  chapterOf,
   filterActivities,
   filterKeyFor,
+  type Activity,
   type FilterState,
 } from "@/lib/activities";
 import { FAQ, THE_101 } from "@/content/unplug";
 
 /* Deliverable B — the component library, every variant × state.
    Live where the mockups were live: filters, slider, accordion,
-   email form, modal. */
+   email form, the snapshot dialog. Every activity shown is a real one
+   from the book (#44 Mind Reading, #09 Ducks in a Row, …). */
+
+// Present in the data; the check script guarantees it.
+const SAMPLE = byNumber("44") as Activity;
+const SAMPLE_ROW = byNumber("09") as Activity;
 
 function Section({ title, note, children }: { title: string; note?: string; children: React.ReactNode }) {
   return (
@@ -44,10 +58,39 @@ function Row({ label, children }: { label: string; children: React.ReactNode }) 
   );
 }
 
+/** A pressable card, wired to the page's one snapshot dialog. */
+function LiveCard({ activity, layout, className }: { activity: Activity; layout: "row" | "stack"; className?: string }) {
+  const open = useSnapshot();
+  return (
+    <ActivityCard
+      activity={activity}
+      layout={layout}
+      className={className}
+      onOpen={open ? () => open(activity.n) : undefined}
+    />
+  );
+}
+
+function OpenSnapshotButton() {
+  const open = useSnapshot();
+  return (
+    <Button size="block" onClick={() => open?.(SAMPLE.n)}>
+      Open the snapshot
+    </Button>
+  );
+}
+
 export function ComponentLibrary() {
-  const [filters, setFilters] = useState<FilterState>({ "where:Indoor": true });
+  return (
+    <SnapshotProvider>
+      <Library />
+    </SnapshotProvider>
+  );
+}
+
+function Library() {
+  const [filters, setFilters] = useState<FilterState>({});
   const [hours, setHours] = useState(2);
-  const [modalOpen, setModalOpen] = useState(false);
 
   const shown = filterActivities(ACTIVITIES, filters);
   const count = activeFilterCount(filters);
@@ -163,7 +206,7 @@ export function ComponentLibrary() {
       {/* ── FILTER BAR — LIVE ─────────────────────────────── */}
       <Section
         title="Live filter bar"
-        note="Six groups, each coded to one pop. Selected takes the fill, a hard shadow in the pressed shade, a ✓ prefix and aria-pressed — state is never colour-only. Click to toggle."
+        note="Five groups, each coded to one pop. Selected takes the fill, a hard shadow in the pressed shade, a ✓ prefix and aria-pressed — state is never colour-only. Click to toggle."
       >
         <div className="flex flex-col gap-4.5">
           {FILTER_GROUPS.map((g) => (
@@ -210,10 +253,11 @@ export function ComponentLibrary() {
         note="16px sits below the 20px floor for type on a solid pop, so every badge uses the pop's pale tint with ink navy on top. Radius 8 — a badge isn't pressable."
       >
         <Row label="Semantic">
-          <TimeBadge time="30 min" />
+          <ChapterBadge chapter={chapterOf(SAMPLE)} />
           <WhereBadge where="Indoor" />
           <WhereBadge where="Outdoor" />
-          <MessBadge mess={2} />
+          <HelpBadge help="oven" />
+          <DaysBadge />
         </Row>
         <Row label="All tints">
           {(["red", "blue", "teal", "magenta", "orange"] as const).map((pop) => (
@@ -225,9 +269,11 @@ export function ComponentLibrary() {
         <Row label="Numerals">
           {(
             [
-              ["07", "blue"],
-              ["58", "magenta"],
-              ["91", "orange"],
+              ["01", "red"],
+              ["05", "blue"],
+              ["09", "teal"],
+              ["14", "magenta"],
+              ["19", "orange"],
             ] as const
           ).map(([n, pop]) => (
             <OutlineNumeral key={n} value={n} size={48} pop={pop} on="cream" />
@@ -243,11 +289,12 @@ export function ComponentLibrary() {
       {/* ── CARDS ─────────────────────────────────────────── */}
       <Section
         title="Card states"
-        note="Cream surface, radius 24, hard sun-deep offset. Hover lifts 4px with a 1.5° tilt; the outlined numeral is decorative, so the card carries one accessible label with the number spelled out."
+        note="Cream surface, radius 24, hard sun-deep offset. Hover lifts 4px with a 1.5° tilt; the outlined numeral is decorative, so the card carries one accessible label with the number spelled out. Press a card to peek inside; the last of the three is the inert version, with no onOpen."
       >
         <div className="flex flex-wrap items-start gap-5">
+          <LiveCard activity={SAMPLE} layout="stack" className="w-[280px]" />
+          <LiveCard activity={SAMPLE_ROW} layout="row" className="w-[340px]" />
           <ActivityCard activity={ACTIVITIES[0]} layout="stack" className="w-[280px]" />
-          <ActivityCard activity={ACTIVITIES[3]} layout="row" className="w-[340px]" />
           <EmptyCardSlot className="h-[210px] w-[280px]">
             Dealt card lands here
           </EmptyCardSlot>
@@ -293,41 +340,12 @@ export function ComponentLibrary() {
         <Accordion rows={FAQ.rows} />
       </Section>
 
-      {/* ── MODAL — LIVE ──────────────────────────────────── */}
-      <Section title="Modal" note="Focus trap, Esc to close, scroll lock, focus returned to the trigger. Live — open it and try Tab and Esc.">
-        <Button size="block" onClick={() => setModalOpen(true)}>
-          Open the modal
-        </Button>
-        <Modal open={modalOpen} onClose={() => setModalOpen(false)} title="Activity 07">
-          <div className="flex items-start gap-4">
-            <OutlineNumeral value="07" size={54} pop="blue" on="cream" />
-            <div>
-              <h2 className="font-display text-[34px] leading-[1.05] font-bold">
-                Activity 07
-              </h2>
-              <p className="mt-1 text-[19px] font-black">
-                Blanket fort, engineering rules
-              </p>
-            </div>
-          </div>
-          <div className="mt-4 flex flex-wrap gap-2">
-            <TimeBadge time="30 min" />
-            <WhereBadge where="Indoor" />
-            <MessBadge mess={2} />
-          </div>
-          <p className="mt-4 text-body">
-            One rule: it has to stand up on its own for a count of ten. That&apos;s the
-            whole game, and it&apos;s the reason it lasts past the first five minutes.
-          </p>
-          <div className="mt-6 flex flex-wrap gap-3">
-            <Button size="block" onClick={() => setModalOpen(false)}>
-              Got it
-            </Button>
-            <Button variant="secondary" size="block" onClick={() => setModalOpen(false)}>
-              Close
-            </Button>
-          </div>
-        </Modal>
+      {/* ── SNAPSHOT DIALOG — LIVE ────────────────────────── */}
+      <Section
+        title="Snapshot dialog"
+        note="The Modal, rendered through a portal so it can't be clipped by a transformed card. Focus trap, Esc to close, scroll lock, focus returned to the trigger, a visible 48px close button. Live — open it, then try Tab, Esc and “Another one”. Also opens from /#activity-44."
+      >
+        <OpenSnapshotButton />
       </Section>
     </>
   );

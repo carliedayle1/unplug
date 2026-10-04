@@ -20,11 +20,20 @@ without a second title to justify it.
 /               the book: hero, what's in it, the interactive extras (#extras),
                 excerpt/what's-needed, who wrote it, the checklist
 /about          bio + what the book stands for
-/checklist      the free lead magnet ("Ten to start with")
+/checklist      the free lead magnet ("Ten to start with") — printable
 /contact        email + socials
 /privacy /terms stubs
 /styleguide     the design system, rendered from the real components
+/activities/<slug>  one page per activity (all 101, prerendered): exactly the
+                    snapshot's content, never the steps. Unknown slugs 404.
+/sitemap.xml /robots.txt   generated; the styleguide and legal stubs are excluded
 ```
+
+`#extras` runs on the book's **real 101** and, in order: This month → The 101
+(filters + click-to-peek) → Boredom Button → Mind Reader → Secret Languages →
+Screen-Time Swap → Dream Planner → Sticker chart → Peek Inside → FAQ. One
+`SnapshotProvider` wraps them, so any card, chip or label can open the same
+"what's inside" dialog, and `/#activity-44` deep-links to it.
 
 `content/books.ts` still models `Book`/`BOOKS` properly (a second title would
 get its own entry), and `BOOK_URL` still exists as a named export — it just
@@ -61,16 +70,40 @@ running site before being caught. Assume mockup copy is filler until sourced.
   — the retailer shows the current one.
 - **`realPhotoOnly` slots never get a Midjourney prompt.** Author photos and
   book covers. Generating those fabricates a likeness or misrepresents a product.
-- **The 12 activities in `lib/activities.ts` are demo data**, not the book's.
-  A visible notice on the extras page says so; delete it when the real list
-  lands, not before.
+- **The 101 in `content/activities.ts` are the book's real list.** `n`, `name`,
+  `chapter`, `page` and `needs` come from the manuscript; `teaser`, `hook`, the
+  tags (`where`/`who`/`help`/`takesDays`), `TEN_TO_START` and `MONTHLY` are *our
+  draft*. The book is ungraded and gives no times, so there is deliberately no
+  age, minutes, mess or cost field — don't add one, every value would be
+  invented. (The old demo list had all four.)
+- **Teasers**: one or two sentences, our own words, never copied. Never a
+  trick's secret, a puzzle's answer, a game's board or a punchline — the book is
+  what's for sale. US English, second person, no statistics.
+  `npm run check:content` enforces length, page order, spoilers and banned
+  phrases; run it after touching `content/activities.ts`.
+- **Describe what the book DOES.** The manuscript contradicted several things
+  we'd written: "twenty minutes, nothing to buy" (bulbs take 13 weeks, some
+  projects want plaster or a sewing machine), "the rule that makes it last" and
+  "a variation for every activity" (the book has neither), and "no screen-time
+  statistics" (pp. 5–19 are full of them). See `DRAFT_CONTENT.md`. The site's
+  "never a verdict on the parent" is a rule for OUR copy, not a claim about the
+  book — its preamble does judge parents.
+- **Page images and printables only when approved.** A page of the book is the
+  author's and publisher's to publish. `scripts/render-spreads.py` writes the
+  Peek Inside spreads and the printable PDFs to `.pending/` (git-ignored); each
+  shows only once it's in `APPROVED_PAGES` / `APPROVED_PRINTABLES` in
+  `content/media.ts`. **The manuscript PDF never enters the repo.**
+- **The snapshot and `/activities/<slug>` render the same `<ActivityFacts>`.**
+  Don't add anything to one that isn't in the other, and never the steps.
+- **Don't put on the site**: the dedication's family names, the named children in
+  Tennis Golf, the publisher's address or phone.
 
 ## Placeholders
 
 Genuine gaps render as a `Slot` (`src/content/placeholders.ts` +
 `src/components/content/Slot.tsx`): what's needed and who supplies it, in
-language addressed to the author. ~14 of them now that most sections carry
-drafted copy. The old "§n" intake references are gone — they were internal
+language addressed to the author. Nine today: the spreads and printables asks
+disappear once everything they ask for is approved. The old "§n" intake references are gone — they were internal
 notes and had no business on a page a client sees.
 
 ## Icons
@@ -143,7 +176,8 @@ Second person, present tense, short sentences. The site never diagnoses a
 problem — it hands over something to do. No screen-time statistics, no "are you
 doing enough?", never the words "digital detox", no baby talk aimed at parents.
 Book-extras strings live in `src/content/unplug.ts`; author/site strings in
-`src/content/author.ts` and `src/content/nav.ts`. (`src/lib/copy.ts` no longer
+`src/content/author.ts` and `src/content/nav.ts`; the 101 themselves in
+`src/content/activities.ts`. (`src/lib/copy.ts` no longer
 exists — content moved to `src/content/` early on; ignore any stale reference
 to it.)
 
@@ -152,6 +186,28 @@ Two things are load-bearing for trust and must not be "optimised" away: the
 on the parent** in the Screen-Time Swap.
 
 # Gotchas found the hard way
+
+- **`position: fixed` is trapped by any transformed ancestor.** On this site that
+  is nearly everything: `Reveal`, the grid's `motion.li`, and the activity card's
+  own hover lift. `Modal` therefore renders through a portal into `<body>`. Don't
+  put a fixed overlay inside a card without one.
+- **`next/image` in a fixed-width slot needs `sizes`.** Without it, it assumes
+  100vw and fetched a 3840px rendition for a 380px Peek Inside slot.
+- **The current month is a client-only fact.** `ThisMonth` reads it with
+  `useSyncExternalStore` and a `null` server snapshot, so the statically
+  prerendered page never bakes in a stale month. `?month=1–12` overrides it for
+  review, like `?motion=`.
+- **`content/activities.ts` must stay loadable by plain Node.** The check script
+  imports it directly under Node's type stripping, so it can't use `@/` aliases
+  or non-erasable TypeScript (enums, parameter properties).
+- **Print is one area, not the page.** `printOnly()` (`lib/printOnly.ts`) sets
+  `body[data-print]`, and the `@media print` block in `globals.css` hides
+  everything but the `data-printable` area. A fourth printable needs a fourth
+  rule set — an attribute selector can't take a variable.
+- **The JSON-LD `<` escape needs a DOUBLE backslash in source.** The sanitiser
+  is `.replace(/</g, "\\u003c")`. Written with a single backslash it
+  is just the `<` character, and the escape silently does nothing. It is easy to
+  get wrong, and it looks right. (The homepage got it wrong once.)
 
 - **`ButtonLink` + `hidden` don't mix.** The button base classes include
   `inline-flex`, which sits in the same layer at the same specificity as

@@ -14,6 +14,13 @@ import { authorText, type Slot } from "./placeholders";
      · categories
      · the Amazon listing URL
 
+   Verified from the manuscript itself (3/11/26), copyright page:
+     · eBook ISBN     978-1-968807-17-7
+     · first written  January 2003, revised 2025
+     · The Library of Congress number and the publisher's street
+       address and phone are in there too. Deliberately not used: a
+       phone number on a public site is the publisher's call.
+
    REMOVED as designer fiction — the mockups asserted all of this and
    none of it holds up:
      · "£12.99 / £6.99 / £17.99"  — the listing is amazon.com, in USD,
@@ -48,9 +55,16 @@ export type Book = {
   coverAlt: string;
   tags: string[];
   published: string | null;
+  /** The same date, machine-readable, for structured data. */
+  publishedIso: string | null;
   publisher: string | null;
   pages: number | null;
   isbn13: string | null;
+  /** On the copyright page. Not linked as a buyable edition until we
+      know the ebook is actually on sale. */
+  isbn13Ebook: string | null;
+  /** "First written in 2003, revised in 2025." — from the copyright page. */
+  editionNote: string | null;
   formats: Format[];
   buyLinks: BuyLink[];
   /** Back-cover style blurb. */
@@ -80,9 +94,12 @@ export const BOOKS: Book[] = [
       "UNPLUG! 101 Ways to Pull Your Kids Away from Their Electronics, by Wanda Kanten Hartfield",
     tags: ["Parenting", "Activities", "Learning styles"],
     published: "30 November 2025",
+    publishedIso: "2025-11-30",
     publisher: "Books Academy LLC",
     pages: 154,
     isbn13: "978-1-968807-16-0",
+    isbn13Ebook: "978-1-968807-17-7",
+    editionNote: "First written in 2003, revised in 2025.",
     formats: [
       {
         name: "Paperback",
@@ -97,12 +114,13 @@ export const BOOKS: Book[] = [
         url: "https://www.amazon.com/Unplug-Ways-Pull-Your-Electronics/dp/1968807160/",
       },
     ],
-    /* DRAFT — written from the book's own subject matter and the
-       author's stated position ("Turn off the Phone… Demand and expect
-       more of your kids"). Needs the author's sign-off, or replacing
-       with the real back-cover text. */
+    /* DRAFT — written from the manuscript's own contents. Needs the
+       author's sign-off, or replacing with the real back-cover text.
+       (An earlier draft promised activities "sorted by the time you
+       have" and made "with what's already in the house" sound universal.
+       The book is sorted into chapters, not by time.) */
     blurb:
-      "One hundred and one things to do instead. Not a lecture about screens, and not a list you could have googled — a book of real activities you can start this afternoon, with what's already in the house. Sorted so you can find one that fits the time you actually have.",
+      "One hundred and one things to do instead, from a former Romper Room teacher and mother of two. Magic tricks, paper folding, kitchen projects, secret languages, games for a crowd, costumes and holiday projects. Each one a starting point for something bigger.",
     excerptSlot: authorText("A sample spread or two of real text", {
       note: "Readers who get this far are close to buying. Even one page of the real thing does more than any description.",
       lines: 8,
@@ -114,7 +132,7 @@ export const BOOKS: Book[] = [
         lines: 5,
       }),
       authorText("Ebook or audiobook editions?", {
-        note: "Only the paperback is listed. If there's a Kindle or audio edition we'll add it with its own buy link.",
+        note: "The copyright page lists an eBook ISBN (978-1-968807-17-7). Is it on sale yet? If so, send the link and we'll add it, and an audio edition too if there is one.",
       }),
       authorText("Other retailers", {
         note: "Amazon is linked. Add Barnes & Noble, Bookshop.org, or a direct link if you have them.",

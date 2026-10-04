@@ -20,6 +20,17 @@
    is new. Nothing in either field is invented — treat this content as
    settled, not a placeholder awaiting sign-off.
 
+   REVISED AFTER READING THE MANUSCRIPT. Two sentences we drafted
+   described the book in ways it isn't: "no statistics" (the preamble,
+   pp. 5–19, is full of them), "fits the twenty minutes" and "nothing in
+   it requires a trip to a shop" (the bulbs need thirteen weeks; some
+   projects want plaster of Paris or a sewing machine), and "what to do
+   when it stops working" (the book doesn't say that). The last
+   two paragraphs of longBio and the second paragraph of shortBio are
+   rewritten to say only what the book does. They were ours, not hers —
+   but she approved the old wording, so DRAFT_CONTENT.md lists the
+   changes for her to confirm. Her biographical paragraphs are untouched.
+
    The real photo landed too (public/author_pic.jpg) — see
    components/content/AuthorPhoto.tsx. There is no longer a photo slot
    here; nothing on the About page is a placeholder any more.
@@ -39,7 +50,7 @@ export const AUTHOR = {
      added, just shortened for a smaller space. */
   shortBio: [
     "Wanda Kanten Hartfield was raised in Sylvan Lake, Alberta, Canada, where she and her sisters spent long winter days creating their own entertainment. She went on to become “Miss Wanda,” host of Romper Room, delighting millions of children in the Magic Mirror — then tested her ideas for real as the mother of two sons.",
-    "UNPLUG! is where those ideas landed: 101 things to do instead, with no statistics, no guilt, and no suggestion you've already failed — just the next thing to try.",
+    "UNPLUG! is where those ideas landed: 101 things to do instead, so there's something better waiting when the screen goes off.",
   ],
 
   /* In her own words, supplied directly — not drafted here. */
@@ -49,28 +60,31 @@ export const AUTHOR = {
     "Becoming a mother of two sons, Wanda was able to test her projects and ideas in the real world of her children. She was firm in the belief that if you teach your child to self-entertain, dependence on all electronics is diminished.",
     "Wanda writes for the parent standing in the kitchen at five o'clock, aware that the tablet has been on for a while, and out of ideas.",
     "Her position is an unfashionably direct one. The argument over children's screen time tends to circle: the networks blame the parents, the parents blame the networks, and everyone agrees something ought to be done. She doesn't find that useful. Television and phones are businesses, and businesses are not going to raise anyone's children. The rules are the parent's to set — and rules are easier to keep when there is something waiting on the other side.",
-    "So UNPLUG! is not a book about screens at all. It is a book of things to do: one hundred and one of them, arranged so a tired adult can find one that fits the twenty minutes and the materials actually available. Nothing in it requires a trip to a shop, a cleared afternoon, or a child who is already enthusiastic.",
-    "The tone throughout is the one she'd use with a friend rather than an audience. No statistics about screen time. No suggestion you have already failed. Just the next thing to try, and what to do when it stops working.",
+    "So UNPLUG! opens with the case for taking charge of the off switch, then gets on with the part that matters most: one hundred and one things to do instead, from magic tricks and paper folding to kitchen projects, games and costumes. Each one is a way of offering something better than the screen.",
+    "The tone throughout is the one she'd use with a friend rather than an audience: plain, practical and a little bit funny. Pick one, hand it to a child, and see where it goes.",
   ],
 
-  /* DRAFT — thematic, not biographical. Presented as what the book
-     stands for rather than as career milestones we can't verify. */
+  /* DRAFT — thematic, not biographical. What the book stands for, and
+     each line checked against the manuscript. The first version of these
+     promised twenty minutes and nothing to buy, "the one rule that keeps
+     it going" and a variation for every activity. The book does none of
+     that, so they're gone. Needs the author's sign-off. */
   principles: [
     {
-      title: "Twenty minutes, nothing to buy",
-      body: "Most of the 101 fit in the time between getting home and getting dinner on, using what's already in the house.",
+      title: "101 of them, in 18 chapters",
+      body: "Magic tricks, paper folding, kitchen projects, secret languages, games for a crowd, costumes. Pick and choose, in any order. If one doesn't catch, the next one might.",
     },
     {
-      title: "The rule that makes it last",
-      body: "Anyone can suggest a blanket fort. The useful part is the one rule that keeps it going past the first five minutes.",
+      title: "Written to the kid",
+      body: "The activity pages talk straight to the child, with a note here and there for the grown-up. Hand one over and let them run with it.",
     },
     {
-      title: "What to do when it stops working",
-      body: "Every activity has a variation for the second time, and for the child who has decided they're too old for it.",
+      title: "Made from what's lying around",
+      body: "Coffee cans, coat hangers, bottle caps, panty hose, a muffin pan. Where something specific is needed, the book sends you to the library, a garage sale or the craft store.",
     },
     {
-      title: "Never a verdict on the parent",
-      body: "No screen-time statistics, no diagnosis, no guilt. You came for something to do; that's what the book hands you.",
+      title: "Each one leads somewhere",
+      body: "They're starting points, not one-offs. A collection of coins or shells can grow into a lifelong interest.",
     },
   ],
 
@@ -105,9 +119,9 @@ export const AUTHOR = {
     blurb:
       "A one-page checklist of ten activities from the book — the easiest ones to say yes to. Print it, stick it on the fridge, work down it.",
     giveawaySlot: {
-      need: "The checklist itself, and where the emails should go",
+      need: "Which ten, and where the emails should go",
       source: "either" as const,
-      note: "We can lay the checklist out from ten of the book's activities — just say which ten. For the emails, tell us the service you use (Mailchimp, Substack, anything) or we'll suggest one.",
+      note: "The checklist is live on this page, with ten we picked from the book (a kid can run each one, and they need everyday things). Swap any you like. For the emails, tell us the service you use (Mailchimp, Substack, anything) or we'll suggest one.",
     },
   },
 } as const;

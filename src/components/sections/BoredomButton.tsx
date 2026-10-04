@@ -2,11 +2,12 @@
 
 import { useRef, useState } from "react";
 import { Section, SectionHeading } from "./Section";
+import { useSnapshot } from "./ActivitySnapshot";
 import { Button } from "@/components/primitives/Button";
 import { ActivityCard, EmptyCardSlot } from "@/components/primitives/ActivityCard";
 import { Confetti } from "@/components/art/Confetti";
 import { useReducedMotion } from "@/lib/useReducedMotion";
-import { DECK, activityLabel, type Activity } from "@/lib/activities";
+import { DECK, activityLabel, pageLabel, pathFor, type Activity } from "@/lib/activities";
 import { BOREDOM } from "@/content/unplug";
 
 /* 03 · Boredom Button — the shareable.
@@ -17,10 +18,15 @@ import { BOREDOM } from "@/content/unplug";
 
    Press → 500ms spinner → card flips in with one overshoot + a
    confetti burst that clears after 1.2s. A repeat press never deals
-   the same card twice in a row. */
+   the same card twice in a row.
+
+   It deals only from DECK (lib/activities.ts): things a kid can start
+   now, with no grown-up needed and no waiting days. The dealt card is
+   pressable like any other and opens the snapshot. */
 
 export function BoredomButton() {
   const reduced = useReducedMotion();
+  const open = useSnapshot();
   const [dealt, setDealt] = useState<Activity | null>(null);
   const [dealing, setDealing] = useState(false);
   const [burst, setBurst] = useState(0);
@@ -43,12 +49,15 @@ export function BoredomButton() {
 
   async function share() {
     if (!dealt) return;
-    const text = `${BOOK_SHARE_PREFIX}${dealt.n} — ${dealt.name}`;
+    const text = `From UNPLUG! — #${Number(dealt.n)} ${dealt.name} (${pageLabel(dealt)})`;
+    // The activity's own page, so the person it's sent to lands on it
+    // (and the link unfurls with its name) rather than at the top of the home page.
+    const url = `${window.location.origin}${pathFor(dealt)}`;
     try {
       if (navigator.share) {
-        await navigator.share({ title: "UNPLUG!", text });
+        await navigator.share({ title: "UNPLUG!", text, url });
       } else {
-        await navigator.clipboard.writeText(text);
+        await navigator.clipboard.writeText(`${text} ${url}`);
         setShareMsg(BOREDOM.shareCopied);
       }
     } catch {
@@ -119,7 +128,11 @@ export function BoredomButton() {
                 className={`w-[280px] ${reduced ? "animate-[dealfade_.3s_ease-out]" : "animate-[dealin_.5s_cubic-bezier(.34,1.56,.64,1)]"}`}
                 style={{ transformStyle: "preserve-3d" }}
               >
-                <ActivityCard activity={dealt} layout="stack" />
+                <ActivityCard
+                  activity={dealt}
+                  layout="stack"
+                  onOpen={open ? () => open(dealt.n) : undefined}
+                />
               </div>
             ) : (
               <EmptyCardSlot className="h-[210px] w-[280px] border-cream text-cream">
@@ -157,4 +170,3 @@ export function BoredomButton() {
   );
 }
 
-const BOOK_SHARE_PREFIX = "From UNPLUG! — activity ";

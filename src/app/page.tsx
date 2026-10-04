@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
 import { Hero } from "@/components/sections/Hero";
@@ -11,7 +12,26 @@ import { EmailForm } from "@/components/primitives/EmailForm";
 import { ButtonLink } from "@/components/primitives/Button";
 import { IconDisc } from "@/components/art/Icon";
 import { AUTHOR } from "@/content/author";
-import { featuredBook } from "@/content/books";
+import { featuredBook, BUY_URL } from "@/content/books";
+import { SITE_URL } from "@/content/site";
+import { ACTIVITIES, CHAPTERS } from "@/lib/activities";
+
+/* The homepage is the book's page, so the book's title is the page's
+   title. Without this it inherited the author-only default, and the one
+   thing a search result needs to say — what the book is called — never
+   appeared. `absolute` skips the "· Wanda Kanten Hartfield" template,
+   because the author's name is already in this one. */
+const book0 = featuredBook();
+export const metadata: Metadata = {
+  title: { absolute: `${book0.title} ${book0.subtitle} — ${AUTHOR.name}` },
+  description: book0.blurb ?? AUTHOR.tagline,
+  openGraph: {
+    title: `${book0.title} ${book0.subtitle}`,
+    description: book0.blurb ?? AUTHOR.tagline,
+    type: "book",
+    images: [{ url: "/cover.jpg", width: 1500, height: 1141, alt: book0.coverAlt }],
+  },
+};
 
 /* The homepage — and the book's only page.
    ─────────────────────────────────────────────────────────────
@@ -21,20 +41,55 @@ import { featuredBook } from "@/content/books";
    the buy links, the excerpt slot, the full set of interactive extras —
    now lives here, in reading order:
 
-     hero (title + buy/try) → what's in it → try it free (#extras,
-     the five interactive features + FAQ) → read a bit / what's still
-     needed → who wrote it → the free checklist.
+     hero (title + buy/try) → what's in it → try it free (#extras: this
+     month, the real 101 with click-to-peek, the Boredom Button, the
+     mind-reader, the secret languages, the Swap, the dream planner, the
+     sticker chart, Peek Inside, FAQ) → read a bit / what's still needed
+     → who wrote it → the free checklist.
 
    The praise / events / latest-news teasers are gone with their pages —
    there was nothing real to put in them. */
 
-const PRINCIPLE_ICONS = ["time", "indoor", "prep", "free"] as const;
+const PRINCIPLE_ICONS = ["prep", "group", "free", "favourite"] as const;
 
 export default function Home() {
   const book = featuredBook();
 
+  /* Structured data for the one book. Only facts from the verified
+     record in books.ts; no price (the retailer shows the current one),
+     no ratings, no reviews. The paperback is a workExample so we can
+     name its ISBN and buy page without claiming a price. `<` is escaped
+     because this is injected as raw HTML (see Next's JSON-LD guide). */
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Book",
+    name: `${book.title} ${book.subtitle}`,
+    url: SITE_URL,
+    description: book.blurb ?? AUTHOR.tagline,
+    image: book.cover ? `${SITE_URL}${book.cover}` : undefined,
+    inLanguage: "en",
+    numberOfPages: book.pages ?? undefined,
+    datePublished: book.publishedIso ?? undefined,
+    author: { "@type": "Person", name: AUTHOR.name },
+    publisher: book.publisher
+      ? { "@type": "Organization", name: book.publisher }
+      : undefined,
+    workExample: {
+      "@type": "Book",
+      bookFormat: "https://schema.org/Paperback",
+      isbn: book.isbn13?.replace(/-/g, ""),
+      url: BUY_URL,
+    },
+  };
+
   return (
     <div className="relative">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c"),
+        }}
+      />
       <PropPlayground />
 
       <Hero />
@@ -46,8 +101,8 @@ export default function Home() {
             What&apos;s in it
           </SectionHeading>
           <p className="mt-3 max-w-[58ch] text-[19px] font-bold md:text-[21px]">
-            {book.pages} pages, {book.tags[0].toLowerCase()} on purpose. Four things
-            every one of the 101 has in common.
+            {book.pages} pages, {ACTIVITIES.length} activities, {CHAPTERS.length}{" "}
+            chapters. {book.editionNote}
           </p>
         </Reveal>
 

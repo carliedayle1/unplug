@@ -41,6 +41,7 @@
   /* ---- Support -------------------------------------------- */
   --color-link-hover: #ad1868; /* magenta-deep */
   --color-dash-empty: #c9c2b0; /* empty sticker ring */
+  --color-scrim: rgb(62 81 99 / 0.55); /* ink-navy behind a dialog */
 
   /* Cover cast skin tones, for the illustration layer */
   --color-skin-1: #f7d2b0;
@@ -366,5 +367,71 @@
   }
   100% {
     transform: scale(1);
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────
+   Print — one named area, not the whole page
+   ─────────────────────────────────────────────────────────────
+   lib/printOnly.ts sets body[data-print="stickers|checklist|planner"]
+   for the length of a print. Each rule set below does the same three
+   things for its area X:
+
+     1. hides everything that is neither X, an ancestor of X, nor inside
+        X — so the nav, the hero and every other section vanish, and no
+        blank page is left behind;
+     2. strips the padding and field colour off X's ancestors, so the
+        area starts at the top of the page rather than 120px down it;
+     3. forces X's contents visible — scroll-reveal animations leave
+        anything below the fold at opacity 0, and paper doesn't scroll.
+
+   It's three copies because an attribute selector can't take a
+   variable. Add a fourth for a fourth printable. */
+
+@media print {
+  body[data-print] {
+    background: #fff;
+  }
+
+  /* ── stickers ── */
+  body[data-print="stickers"]
+    *:not([data-printable="stickers"]):not([data-printable="stickers"] *):not(:has([data-printable="stickers"])) {
+    display: none !important;
+  }
+  body[data-print="stickers"] :has([data-printable="stickers"]) {
+    padding: 0 !important;
+    background: none !important;
+  }
+  body[data-print="stickers"] [data-printable="stickers"] * {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  /* ── checklist ── */
+  body[data-print="checklist"]
+    *:not([data-printable="checklist"]):not([data-printable="checklist"] *):not(:has([data-printable="checklist"])) {
+    display: none !important;
+  }
+  body[data-print="checklist"] :has([data-printable="checklist"]) {
+    padding: 0 !important;
+    background: none !important;
+  }
+  body[data-print="checklist"] [data-printable="checklist"] * {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  /* ── planner ── */
+  body[data-print="planner"]
+    *:not([data-printable="planner"]):not([data-printable="planner"] *):not(:has([data-printable="planner"])) {
+    display: none !important;
+  }
+  body[data-print="planner"] :has([data-printable="planner"]) {
+    padding: 0 !important;
+    background: none !important;
+  }
+  body[data-print="planner"] [data-printable="planner"] * {
+    opacity: 1 !important;
+    transform: none !important;
   }
 }

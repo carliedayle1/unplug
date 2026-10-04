@@ -4,6 +4,7 @@ import "./globals.css";
 import { NavBar } from "@/components/chrome/NavBar";
 import { Footer } from "@/components/chrome/Footer";
 import { AUTHOR } from "@/content/author";
+import { SITE_URL } from "@/content/site";
 
 /* Three families, strict jobs.
    Baloo 2  — display, h1/h2, giant numerals only.
@@ -33,8 +34,8 @@ const caveat = Caveat({
 });
 
 export const metadata: Metadata = {
-  // TODO(deploy): point at the real origin so OG/Twitter images resolve absolutely.
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:4310"),
+  // The origin lives in content/site.ts (see its TODO(deploy)).
+  metadataBase: new URL(SITE_URL),
   title: {
     default: `${AUTHOR.name} — ${AUTHOR.role}`,
     template: `%s · ${AUTHOR.name}`,

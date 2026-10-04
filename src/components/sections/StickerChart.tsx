@@ -2,14 +2,16 @@
 
 import { useState } from "react";
 import { Section, SectionHeading, Reveal } from "./Section";
+import { useSnapshot } from "./ActivitySnapshot";
 import { Button, ButtonLink } from "@/components/primitives/Button";
 import { OutlineNumeral } from "@/components/primitives/OutlineNumeral";
 import { Confetti } from "@/components/art/Confetti";
 import { Icon } from "@/components/art/Icon";
 import { useLocalStorage } from "@/lib/useLocalStorage";
 import { useReducedMotion } from "@/lib/useReducedMotion";
+import { printOnly } from "@/lib/printOnly";
 import { STICKERS } from "@/content/unplug";
-import type { Pop } from "@/lib/activities";
+import { TEN_TO_START, activitiesFor, type Pop } from "@/lib/activities";
 
 /* 05 · Sticker chart — empty → partial → celebration.
    ─────────────────────────────────────────────────────────────
@@ -18,7 +20,12 @@ import type { Pop } from "@/lib/activities";
 
    The tenth is the one place teal takes over the field — the only
    section allowed to change the page colour. Confetti runs 1.2s then
-   clears; under reduced motion it's a single static burst. */
+   clears; under reduced motion it's a single static burst.
+
+   The ten stickers are the ten activities of the free checklist
+   (TEN_TO_START). Under the circles, "The ten" names them, and each name
+   opens that activity's snapshot — so the chart is a to-do list from the
+   book, not ten anonymous dots. Print prints the chart alone. */
 
 const POPS: Pop[] = ["red", "blue", "magenta", "orange", "teal"];
 const POP_HEX: Record<Pop, string> = {
@@ -38,9 +45,11 @@ const TICK: Record<Pop, string> = {
 };
 
 const EMPTY = Array<boolean>(10).fill(false);
+const TEN = activitiesFor(TEN_TO_START);
 
 export function StickerChart() {
   const reduced = useReducedMotion();
+  const open = useSnapshot();
   const [stuck, setStuck] = useLocalStorage<boolean[]>("unplug:stickers", EMPTY);
   const [burst, setBurst] = useState(0);
 
@@ -68,7 +77,10 @@ export function StickerChart() {
     >
       <Confetti fireKey={burst} />
 
-      <div className="relative grid gap-8 lg:grid-cols-[1fr_1.1fr] lg:items-start lg:gap-12">
+      <div
+        data-printable="stickers"
+        className="relative grid gap-8 lg:grid-cols-[1fr_1.1fr] lg:items-start lg:gap-12"
+      >
         <Reveal>
           {full ? (
             <div className="text-center lg:text-left">
@@ -110,10 +122,10 @@ export function StickerChart() {
             </p>
           </div>
 
-          <div className="mt-5 flex flex-col gap-3 sm:flex-row">
+          <div className="mt-5 flex flex-col gap-3 sm:flex-row print:hidden">
             {full ? (
               <>
-                <Button size="block" onClick={() => window.print()}>
+                <Button size="block" onClick={() => printOnly("stickers")}>
                   {STICKERS.printCertificate}
                 </Button>
                 <Button
@@ -132,7 +144,7 @@ export function StickerChart() {
                 <Button
                   variant="secondary"
                   size="block"
-                  onClick={() => window.print()}
+                  onClick={() => printOnly("stickers")}
                 >
                   {STICKERS.printPaper}
                 </Button>
@@ -152,7 +164,7 @@ export function StickerChart() {
                     <button
                       type="button"
                       aria-pressed={on}
-                      aria-label={`${on ? "Remove" : "Add"} sticker ${i + 1} of 10`}
+                      aria-label={`${on ? "Remove" : "Add"} sticker ${i + 1} of 10: ${TEN[i]?.name ?? ""}`}
                       onClick={() => toggle(i)}
                       className={`flex aspect-square cursor-pointer items-center justify-center rounded-full p-0 ${on ? "border-0" : "border-3 border-dashed border-dash-empty bg-transparent"} ${on && !reduced ? "animate-[stick_.28s_cubic-bezier(.34,1.56,.64,1)]" : ""}`}
                       style={on ? { background: POP_HEX[pop] } : undefined}
@@ -173,6 +185,26 @@ export function StickerChart() {
             <p className="mt-3.5 text-center text-[17px] font-bold text-ink-muted">
               {done === 0 ? STICKERS.emptyNote : STICKERS.tapHint}
             </p>
+
+            {/* The ten, by name. Pressing one peeks inside it; the tick
+                shows the sticker is on. On paper these become a plain
+                list to colour in beside. */}
+            <ol className="m-0 mt-4 flex list-none flex-wrap gap-2 p-0 print:grid print:grid-cols-2 print:gap-1">
+              {TEN.map((a, i) => (
+                <li key={a.n}>
+                  <button
+                    type="button"
+                    disabled={!open}
+                    onClick={() => open?.(a.n)}
+                    aria-label={`Peek inside: ${a.name}`}
+                    className={`min-h-11 cursor-pointer rounded-full border-3 border-ink-navy px-3.5 py-1.5 text-[18px] font-extrabold text-ink-navy hover:bg-sun-deep print:border-0 print:p-0 print:text-[16px] ${stuck[i] ? "bg-sun-deep" : "bg-cream"}`}
+                  >
+                    <span aria-hidden>{stuck[i] ? "✓ " : `${i + 1}. `}</span>
+                    {a.name}
+                  </button>
+                </li>
+              ))}
+            </ol>
           </div>
         </Reveal>
       </div>

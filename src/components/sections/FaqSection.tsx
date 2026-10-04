@@ -25,7 +25,7 @@ export function FaqSection() {
             {FAQ.heading}
           </SectionHeading>
           <p className="mt-3 max-w-[46ch] text-[19px] font-bold md:text-[21px]">
-            The three questions that come up most.
+            {FAQ.lead}
           </p>
           <ButtonLink
             href={BUY_URL}

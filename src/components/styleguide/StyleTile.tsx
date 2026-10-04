@@ -1,8 +1,8 @@
 import { IconDisc, ICON_DISC, type IconName } from "@/components/art/Icon";
 import { PROP_KIT } from "@/components/art/props";
-import { SplatMeter } from "@/components/primitives/Badge";
+import { SplatMeter, type MessLevel } from "@/components/primitives/Badge";
 import { OutlineNumeral, OneOhOne } from "@/components/primitives/OutlineNumeral";
-import type { MessLevel, Pop } from "@/lib/activities";
+import type { Pop } from "@/lib/activities";
 
 /* Deliverable A — the style tile, rendered from real tokens. */
 
@@ -251,7 +251,7 @@ export function StyleTile() {
               UI / Body — Nunito · 600–900
             </div>
             <div className="mt-3 text-[34px] leading-[1.2] font-black">
-              Twenty minutes. No prep. One kid or five.
+              Pick one. Hand it over. Go.
             </div>
             <p className="mt-3 text-body">
               Nunito carries every word a parent actually reads. Generous x-height,
@@ -618,10 +618,10 @@ export function StyleTile() {
                   </span>
                 </div>
                 <ul className="mt-2 list-disc pl-5 text-[17px] leading-[1.5] font-semibold">
-                  <li>“Twenty minutes, nothing to buy.”</li>
-                  <li>“Works in a hallway.”</li>
+                  <li>“Pick one. Hand it over.”</li>
+                  <li>“Lots start with what’s in the kitchen drawer.”</li>
                   <li>“Bored? Hit the button.”</li>
-                  <li>“Peek inside — 6 free pages.”</li>
+                  <li>“Peek inside — six real pages.”</li>
                 </ul>
               </div>
               <div>

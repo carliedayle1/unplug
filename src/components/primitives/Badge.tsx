@@ -1,6 +1,5 @@
 import type { ReactNode } from "react";
-import type { MessLevel, Pop } from "@/lib/activities";
-import { MESS_LABEL } from "@/lib/activities";
+import type { Activity, Chapter, Pop } from "@/lib/activities";
 
 /* Badges & the mess meter.
    ─────────────────────────────────────────────────────────────
@@ -8,7 +7,12 @@ import { MESS_LABEL } from "@/lib/activities";
    solid pop — so every badge uses the pop's PALE TINT with ink navy
    on top. That's not a stylistic choice; no pop clears 4.5:1 against
    either ink at badge sizes. The tint is the whole reason badges are
-   readable. Radius 8 (sm), because a badge isn't pressable. */
+   readable. Radius 8 (sm), because a badge isn't pressable.
+
+   The badges an activity card carries are the book's own facts: the
+   chapter it's in, where it happens, whether a grown-up needs to be on
+   hand and whether it takes days. (The old time / mess badges described
+   demo data that was never the book's, and are gone.) */
 
 export function Badge({
   pop,
@@ -26,14 +30,9 @@ export function Badge({
   );
 }
 
-/** Time badge — always orange tint, always with the clock. */
-export function TimeBadge({ time }: { time: string }) {
-  return (
-    <Badge pop="orange">
-      <span aria-hidden>⏱&nbsp;</span>
-      {time}
-    </Badge>
-  );
+/** The chapter, in the chapter's own pop. */
+export function ChapterBadge({ chapter }: { chapter: Chapter }) {
+  return <Badge pop={chapter.pop}>{chapter.name}</Badge>;
 }
 
 /** Where badge — blue for indoor, teal for outdoor, per the tokens. */
@@ -41,16 +40,58 @@ export function WhereBadge({ where }: { where: "Indoor" | "Outdoor" }) {
   return <Badge pop={where === "Indoor" ? "blue" : "teal"}>{where}</Badge>;
 }
 
-/** Mess badge — always magenta tint. */
-export function MessBadge({ mess }: { mess: MessLevel }) {
-  return <Badge pop="magenta">Mess {mess}</Badge>;
+/** Only rendered when a grown-up genuinely needs to be on hand. */
+export function HelpBadge({ help }: { help: NonNullable<Activity["help"]> }) {
+  return <Badge pop="magenta">Grown-up helps · {help}</Badge>;
+}
+
+/** Only rendered when something has to grow, dry or wait. */
+export function DaysBadge() {
+  return (
+    <Badge pop="orange">
+      <span aria-hidden>⏱&nbsp;</span>
+      Takes days
+    </Badge>
+  );
+}
+
+/** Every badge an activity has, in one place, so the card and the dialog
+    can't disagree about what's true of it. */
+export function ActivityBadges({
+  activity,
+  chapter,
+  withChapter = true,
+}: {
+  activity: Activity;
+  chapter: Chapter;
+  withChapter?: boolean;
+}) {
+  return (
+    <>
+      {withChapter && <ChapterBadge chapter={chapter} />}
+      {activity.where.map((w) => (
+        <WhereBadge key={w} where={w} />
+      ))}
+      {activity.help && <HelpBadge help={activity.help} />}
+      {activity.takesDays && <DaysBadge />}
+    </>
+  );
 }
 
 /* The splat meter: three blobs in a bordered pill, filled to the mess
-   level. Blob shape is an irregular border-radius so it reads as a
-   splat rather than a dot. Colour rotates teal → orange → magenta
-   with the level, and the label spells it out so the meter is never
-   colour-only. */
+   level. It's part of the style tile's component set, so it stays here
+   even though no activity carries a mess level any more. Blob shape is
+   an irregular border-radius so it reads as a splat rather than a dot.
+   Colour rotates teal → orange → magenta with the level, and the label
+   spells it out so the meter is never colour-only. */
+
+export type MessLevel = 1 | 2 | 3;
+
+export const MESS_LABEL: Record<MessLevel, string> = {
+  1: "Tidy",
+  2: "Some mess",
+  3: "All in",
+};
 
 const SPLAT_POP: Record<MessLevel, Pop> = {
   1: "teal",

@@ -1,6 +1,8 @@
 "use client";
 
 import { useCallback, useEffect, useRef } from "react";
+import { createPortal } from "react-dom";
+import { IconButton } from "./Button";
 
 /* Focus trap + Esc + scroll lock, shared by the Modal and the Drawer.
    ─────────────────────────────────────────────────────────────
@@ -87,39 +89,67 @@ export function useDialogBehaviour(
   }, [open, onKeyDown, panelRef]);
 }
 
+/* The dialog.
+   ─────────────────────────────────────────────────────────────
+   Rendered through a portal into <body>. A `position: fixed` element is
+   positioned against the nearest ANCESTOR THAT HAS A TRANSFORM, not the
+   viewport — and on this site that's nearly everything: `Reveal`, the
+   grid's `motion.li`, and the activity card's own hover lift. Opened
+   from inside a card, an in-place dialog would have been clipped to the
+   card. The portal makes where it's opened from irrelevant.
+
+   A visible close button is part of the dialog, not left to Esc and the
+   backdrop — a touch user has neither. The content scrolls under it
+   rather than the button scrolling away. Pass `labelledBy` (the id of
+   the visible heading) so the heading names the dialog; `title` is the
+   fallback label when there isn't one.
+
+   The fade is an opacity change only, so it's right for both motion
+   states — reduced motion's global rule shortens it to nothing. */
+
 export function Modal({
   open,
   onClose,
   title,
+  labelledBy,
   children,
 }: {
   open: boolean;
   onClose: () => void;
   title: string;
+  /** id of the heading inside `children` that names this dialog. */
+  labelledBy?: string;
   children: React.ReactNode;
 }) {
   const panelRef = useRef<HTMLDivElement>(null);
   useDialogBehaviour(open, onClose, panelRef);
 
-  if (!open) return null;
+  if (!open || typeof document === "undefined") return null;
 
-  return (
+  return createPortal(
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-5"
-      style={{ background: "rgb(62 81 99 / 0.55)" }}
+      className="fixed inset-0 z-50 flex animate-[dealfade_.18s_ease-out] items-center justify-center bg-scrim p-4 md:p-5"
       onClick={onClose}
     >
       <div
         ref={panelRef}
         role="dialog"
         aria-modal="true"
-        aria-label={title}
+        {...(labelledBy ? { "aria-labelledby": labelledBy } : { "aria-label": title })}
         tabIndex={-1}
         onClick={(e) => e.stopPropagation()}
-        className="max-h-[85vh] w-full max-w-[560px] overflow-auto rounded-xl bg-cream p-7 shadow-[0_14px_0_var(--color-sun-deep)]"
+        className="relative flex max-h-[88vh] w-full max-w-[640px] flex-col rounded-xl bg-cream shadow-[0_14px_0_var(--color-sun-deep)]"
       >
-        {children}
+        <IconButton
+          label="Close"
+          onClick={onClose}
+          className="absolute top-3 right-3 z-10"
+        >
+          ✕
+        </IconButton>
+        <div className="overflow-auto rounded-xl p-6 md:p-8">{children}</div>
       </div>
-    </div>
+    </div>,
+    document.body,
   );
 }

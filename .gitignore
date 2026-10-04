@@ -39,3 +39,7 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Unapproved renders of book pages — see scripts/render-spreads.py.
+# Nothing in here can be deployed, which is the point.
+.pending/
