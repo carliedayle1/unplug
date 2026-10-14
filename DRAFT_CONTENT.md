@@ -50,6 +50,13 @@ The cover image is the real cover.
 The PDF's page index equals its printed page number (checked), so
 "page 82" on the site is page 82 in the book.
 
+### The interview (About page)
+
+A Vimeo interview with Michael Hartfield, Wanda's husband, about her life
+and the book. Supplied by Bookture Media, October 2026. The site's caption
+says only that: who is speaking and what about. Nothing from the video is
+quoted on the site. Embed URL lives in `INTERVIEW`, `src/content/media.ts`.
+
 ### Wanda's own words (unchanged)
 
 The short and long bios in `src/content/author.ts` and the author photo.

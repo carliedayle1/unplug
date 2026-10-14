@@ -87,3 +87,14 @@ export const MEDIA_SLOTS = {
     note: `The book already tells readers to copy these: ${BOOK_PRINTABLES.map((p) => `${p.title} (page${p.pages.length > 1 ? "s" : ""} ${p.pages.join("–")})`).join(" and ")}. We've made them into print-ready PDFs straight from your manuscript. Say yes and they become free downloads here, no email needed.`,
   }),
 } satisfies Record<string, Slot>;
+
+/* The interview.
+   ─────────────────────────────────────────────────────────────
+   Michael Hartfield, Wanda's husband, talking about her and the book.
+   Supplied by Bookture Media (October 2026). The video is unlisted on
+   Vimeo, so the embed needs the share hash (`h`); `dnt=1` stops the
+   player setting tracking cookies, which keeps /privacy true. */
+export const INTERVIEW = {
+  embed: "https://player.vimeo.com/video/1228386856?h=4f7b71a572&dnt=1",
+  title: "Michael Hartfield on Wanda and UNPLUG!",
+};

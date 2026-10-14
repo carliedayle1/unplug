@@ -12,6 +12,7 @@ import { ButtonLink } from "@/components/primitives/Button";
 import { IconDisc } from "@/components/art/Icon";
 import { AUTHOR } from "@/content/author";
 import { featuredBook, BOOK_URL } from "@/content/books";
+import { INTERVIEW } from "@/content/media";
 
 export const metadata: Metadata = {
   title: "About",
@@ -77,6 +78,30 @@ export default function AboutPage() {
       </Section>
 
       <CordDivider field="cream" />
+
+      {/* ── The interview ────────────────────────────────── */}
+      <Section field="yellow" labelledBy="interview-heading">
+        <Reveal>
+          <SectionHeading id="interview-heading">In conversation</SectionHeading>
+          <p className="mt-3 max-w-[58ch] text-[19px] font-bold md:text-[21px]">
+            Her husband, Michael Hartfield, talks about Wanda&apos;s life and {book.title}.
+          </p>
+        </Reveal>
+        <Reveal>
+          <div className="relative mt-8 aspect-video overflow-hidden rounded-lg border-4 border-ink-navy bg-cream shadow-[0_8px_0_var(--color-sun-deep)]">
+            <iframe
+              src={INTERVIEW.embed}
+              title={INTERVIEW.title}
+              loading="lazy"
+              allow="autoplay; fullscreen; picture-in-picture"
+              allowFullScreen
+              className="absolute inset-0 h-full w-full border-0"
+            />
+          </div>
+        </Reveal>
+      </Section>
+
+      <CordDivider />
 
       {/* ── What the book stands for ─────────────────────── */}
       <Section field="yellow" labelledBy="stands-heading">

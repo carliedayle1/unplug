@@ -40,6 +40,11 @@ export default function PrivacyPage() {
             secret-language translator works entirely in your browser and keeps nothing.
           </p>
           <p className="mt-4 text-[19px] leading-[1.6] font-semibold">
+            The interview on the About page plays from Vimeo. It loads with
+            Vimeo&apos;s &ldquo;do not track&rdquo; setting on, so the player sets no
+            tracking cookies; Vimeo&apos;s own privacy policy covers the video itself.
+          </p>
+          <p className="mt-4 text-[19px] leading-[1.6] font-semibold">
             The &ldquo;Buy on Amazon&rdquo; buttons take you to Amazon, whose own
             privacy policy applies there.
           </p>
